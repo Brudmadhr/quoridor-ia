@@ -37,9 +37,23 @@ public class BRUDMADHR implements PlayerModule {
         wallsCoordinate = new ArrayList<>();
 
         // Construction du graphe
-        List<Vertex> v = new ArrayList<>();
+        List<Vertex> lVertex = new ArrayList<>();
+        // Construction sommet
         for(int k = 0; k<Coordinate.BOARD_DIM*Coordinate.BOARD_DIM;k++){
-            v.add(new Vertex(Integer.toString(k),Integer.toString(k))); // sommets
+            lVertex.add(new Vertex(Integer.toString(k+1),Integer.toString(k+1)));
+        }
+        for(Vertex v : lVertex){
+            int n = new Integer(v.getId());
+            // case à deux voisins (les quatre coins)
+            if(n==1 || n==Coordinate.BOARD_DIM || n==(Coordinate.BOARD_DIM-1)*Coordinate.BOARD_DIM || n==Coordinate.BOARD_DIM*Coordinate.BOARD_DIM){
+                
+            }
+            // case à trois voisins
+            if(){
+
+            }
+            // case à quatre voisins
+
         }
     }
 
