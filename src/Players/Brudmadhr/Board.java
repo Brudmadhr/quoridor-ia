@@ -1,8 +1,4 @@
-package Players.BRUDMADHR;
-
-import Interface.Coordinate;
-
-import java.util.ArrayList;
+package Players.Brudmadhr;
 
 /**
  * Created by brudmadhr on 20/04/16.
@@ -41,10 +37,10 @@ public class Board {
     		board[idep-1][jdep]  = (byte) (board[idep-1][jdep]     | 0b0010);
     		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b0010);
     	}else{ // meme colonne
-    		board[idep][jdep]    = (byte) (board[idep][jdep]     | 0b0001);
-    		board[idep+1][jdep]  = (byte) (board[idep+1][jdep]   | 0b0001);
-    		board[idep][jdep-1]  = (byte) (board[idep][jdep-1]   | 0b0100);
-    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1] | 0b0100);
+    		board[idep][jdep]    = (byte) (board[idep][jdep]       | 0b0001);
+    		board[idep+1][jdep]  = (byte) (board[idep+1][jdep]     | 0b0001);
+    		board[idep][jdep-1]  = (byte) (board[idep][jdep-1]     | 0b0100);
+    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b0100);
     	}
     }
 }

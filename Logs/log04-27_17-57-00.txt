@@ -1,0 +1,9 @@
+04-27 17:57:00 Engine Quoridor Java Part 1 Client v1.0.8 by RIT CS Department starting up
+04-27 17:57:00 Engine Loading player BRUDMADHR
+04-27 17:57:00 Engine Error: java.lang.ClassNotFoundException: Players.BRUDMADHR.BRUDMADHR
+04-27 17:57:00 Engine Error: Failed to load player BRUDMADHR
+04-27 17:57:00 Engine Running part 1 program with 3 fake players added.
+      PRE_MOVES should cycle over 4 players.
+04-27 17:57:00 Engine Calling init() for player 1
+04-27 17:57:00 Engine Error: Invalidating player 1 due to error in init
+04-27 17:57:00 Engine Game has ended
