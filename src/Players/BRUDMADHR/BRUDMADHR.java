@@ -45,9 +45,9 @@ public class BRUDMADHR implements PlayerModule {
         else {
             // diminution du nombre de murs du joueur
             playersNbWalls.put(playerId, getWallsRemaining(playerId) - 1);
-            // ajout du mur dans la liste des murs
-            Wall e  = new Wall(playerMove.getStart(),playerMove.getEnd());
-            //quoridorBoard.getBoard();
+            // ajout du mur dans le board
+            quoridorBoard.setBoard(playerMove.getStart().getRow(),playerMove.getStart().getCol(),
+                                   playerMove.getEnd().getRow(),playerMove.getEnd().getCol());
         }
         System.out.print(playerMove);
     }

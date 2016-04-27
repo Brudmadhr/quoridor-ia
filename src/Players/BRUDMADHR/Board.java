@@ -30,7 +30,7 @@ public class Board {
 
     public byte[][] getBoard(){return board;}
 
-    public void setBoard(){
+    public void setBoard(int idep, int jdep, int iarr, int jarr){
 
     }
 }
