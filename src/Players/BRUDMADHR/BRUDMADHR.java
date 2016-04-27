@@ -63,16 +63,16 @@ public class BRUDMADHR implements PlayerModule {
         int row = coordinate.getRow();
         int col = coordinate.getCol();
         // TODO : test murs
-        if(row-1>=0 ){ // N
+        if(quoridorBoard.deplacementN(row,col)){ // N
             setCoordRet.add(new Coordinate(row-1,col));
         }
-        if(row+1<coordinate.BOARD_DIM){ // S
+        if(quoridorBoard.deplacementS(row,col)){ // S
             setCoordRet.add(new Coordinate(row+1,col));
         }
-        if(col-1>=0){ // O
+        if(quoridorBoard.deplacementO(row,col)){ // O
             setCoordRet.add(new Coordinate(row,col-1));
         }
-        if(col+1<coordinate.BOARD_DIM) { // E
+        if(quoridorBoard.deplacementE(row,col)) { // E
             setCoordRet.add(new Coordinate(row, col + 1));
         }
         return setCoordRet;
