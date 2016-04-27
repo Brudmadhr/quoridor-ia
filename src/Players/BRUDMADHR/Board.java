@@ -13,24 +13,6 @@ public class Board {
 
     public Board(){
         board = new byte[BOARD_SIZE][BOARD_SIZE];
-
-        for(int i=0;i<BOARD_SIZE;i++){
-            for(int j=0;j<BOARD_SIZE;j++){
-                board[i][j]=0b00000000;
-                if(deplacementN(i,j)) {
-
-                }
-                if(deplacementE(i,j)){
-
-                }
-                if(deplacementS(i,j)){
-
-                }
-                if(deplacementO(i,i)){
-
-                }
-            }
-        }
     }
 
     public boolean deplacementN(int i, int j){
@@ -44,5 +26,11 @@ public class Board {
     }
     public boolean deplacementO(int i, int j){
         return (j-1>=0 && ( (board[i][j] & 1) == 0) );
+    }
+
+    public byte[][] getBoard(){return board;}
+
+    public void setBoard(){
+
     }
 }

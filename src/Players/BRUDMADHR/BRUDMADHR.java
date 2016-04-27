@@ -16,8 +16,7 @@ public class BRUDMADHR implements PlayerModule {
     private int                     myNbWalls;
     private Map<Integer,Coordinate> playersCoord;
     private Map<Integer,Integer>    playersNbWalls;
-    private ArrayList<Wall>         wallsCoordinate;
-    private HashMap<Coordinate,Adjacent>              adjacentMatrix;
+    private Board                   quoridorBoard;
 
     @Override
     public void init(Logger logger, int i, int i1, Map<Integer, Coordinate> map) {
@@ -29,41 +28,13 @@ public class BRUDMADHR implements PlayerModule {
         playersCoord.putAll(map);
 
         playersNbWalls = new HashMap<>();
-        for(Integer in : playersCoord.keySet()){
-            playersNbWalls.put(in,10); // 10 murs par défaut au début du jeu
+        for(Integer in : playersCoord.keySet()) {
+            playersNbWalls.put(in, 10); // 10 murs par défaut au début du jeu
         }
 
-        wallsCoordinate = new ArrayList<>();
-
-        // Initialisation matrice d'adjacence
-    /*    adjacentMatrix = new HashMap<>();
-        for(int k=0;i<8;i++){
-            for(int l=0;l<8;l++){
-                Coordinate c = new Coordinate(k,l);
-                Adjacent a   = initAdjacence(c);
-                adjacentMatrix.put(c,a);
-            }
-        }*/
+        quoridorBoard = new Board();
     }
 
-  /*  private Adjacent initAdjacence(Coordinate c){
-        List<Coordinate> lCoordRet = new List<>();
-        int row = c.getRow();
-        int col = c.getCol();
-        if(row-1>=0 ){ // N
-            lCoordRet.add(new Coordinate(row-1,col));
-        }
-        if(row+1<coordinate.BOARD_DIM){ // S
-            setCoordRet.add(new Coordinate(row+1,col));
-        }
-        if(col-1>=0){ // O
-            setCoordRet.add(new Coordinate(row,col-1));
-        }
-        if(col+1<coordinate.BOARD_DIM) { // E
-            setCoordRet.add(new Coordinate(row, col + 1));
-        }
-        return setCoordRet;
-    }*/
 
     @Override
     public void lastMove(PlayerMove playerMove) {
@@ -76,8 +47,7 @@ public class BRUDMADHR implements PlayerModule {
             playersNbWalls.put(playerId, getWallsRemaining(playerId) - 1);
             // ajout du mur dans la liste des murs
             Wall e  = new Wall(playerMove.getStart(),playerMove.getEnd());
-           // Wall e1 = new Wall()
-            wallsCoordinate.add(e);
+            //quoridorBoard.getBoard();
         }
         System.out.print(playerMove);
     }
