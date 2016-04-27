@@ -29,8 +29,21 @@ public class Board {
     }
 
     public byte[][] getBoard(){return board;}
-
-    public void setBoard(int idep, int jdep, int iarr, int jarr){
-
+    
+    /**
+     *  idep, jdep : coords depart ; iarr, jarr : coords arrivee
+     */
+    public void setWall(int idep, int jdep, int iarr, int jarr){
+    	if(idep == iarr){ // meme ligne
+    		board[idep][jdep]= (byte) (board[idep][jdep] | 0b1000);
+    		board[idep][jdep+1]= (byte) (board[idep][jdep+1] | 0b1000);
+    		board[idep-1][jdep]= (byte) (board[idep-1][jdep] | 0b0010);
+    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1] | 0b0010);
+    	}else{ // meme colonne
+    		board[idep][jdep]= (byte) (board[idep][jdep] | 0b0001);
+    		board[idep+1][jdep]= (byte) (board[idep+1][jdep] | 0b0001);
+    		board[idep][jdep-1]= (byte) (board[idep][jdep-1] | 0b0100);
+    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1] | 0b0100);
+    	}
     }
 }
