@@ -1,0 +1,13 @@
+04-27 14:10:55 Engine Quoridor Java Part 1 Client v1.0.8 by RIT CS Department starting up
+04-27 14:10:55 Engine Loading player BRUDMADHR
+04-27 14:10:55 Engine Loaded player BRUDMADHR
+04-27 14:10:55 Engine Running part 1 program with 0 fake players added.
+      PRE_MOVES should cycle over 1 players.
+04-27 14:10:55 Engine Calling init() for player 1
+04-27 14:10:55 Engine Calling init() for reference player
+04-27 14:10:55 P1T_003 doTest called.
+04-27 14:10:55 P1T_003  No problems w/player ID.
+04-27 14:10:55 P1T_003  No problems w/getting neighbors.
+04-27 14:10:55 P1T_003  No problems w/walls remaining.
+04-27 14:10:55 P1T_003  No problems w/player locations.
+04-27 14:10:55 P1T_003  Discrepancy calling getShortestPath([0, 0] to [0, 1]): Player's path = null

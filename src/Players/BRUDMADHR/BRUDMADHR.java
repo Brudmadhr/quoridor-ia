@@ -31,7 +31,6 @@ public class BRUDMADHR implements PlayerModule {
         for(Integer in : playersCoord.keySet()) {
             playersNbWalls.put(in, 10); // 10 murs par défaut au début du jeu
         }
-
         quoridorBoard = new Board();
     }
 
@@ -79,7 +78,58 @@ public class BRUDMADHR implements PlayerModule {
 
     @Override
     public List<Coordinate> getShortestPath(Coordinate coordinate, Coordinate coordinate1) {
-        return null;
+        Queue<Coordinate> queue = new LinkedList<>(); // file des voisins
+        int[][] distance = new int[quoridorBoard.BOARD_SIZE][quoridorBoard.BOARD_SIZE]; // matrice des distances
+
+        // initialisation de la matrice distance à -1 (case non parcourue)
+        for (int i = 0; i < quoridorBoard.BOARD_SIZE; i++) {
+            for (int j = 0; j < quoridorBoard.BOARD_SIZE; j++) {
+                distance[i][j] = -1;
+            }
+        }
+
+        distance[coordinate.getRow()][coordinate.getCol()] = 0; // point de départ
+        queue.add(coordinate); // ajout du point de départ dans la file
+
+        /*
+         * ETAPE 1 : recherche du chemin
+         */
+        boolean endOfPath = false; // vaut vrai quand une coord de la file vaut coordinate1
+        while(!endOfPath){ // on s'arrete quand on est arrivé
+            Coordinate c = queue.poll();
+            if(c == null){ return new ArrayList<>();} // chemin impossible (la case destination est bloquée par les murs) !
+            for(Coordinate neighbor : getNeighbors(c)){ // calcul des distances pour les voisins de la case
+                if(neighbor.getCol() == coordinate1.getCol() && neighbor.getRow() == coordinate1.getRow()){ endOfPath = true;}
+                if(distance[neighbor.getRow()][neighbor.getCol()] != -1) { continue; } // on ne revient pas sur nos pas
+                distance[neighbor.getRow()][neighbor.getCol()]= distance[c.getRow()][c.getCol()]+1; // on a visité la case : incrémentation distance
+                queue.add(neighbor); // ajout à la file pour le traiter
+            }
+        }
+        /*
+         * ETAPE 2 : retourner la liste du chemin le plus court
+         */
+        List<Coordinate> lCoordRet = new ArrayList<>();
+        lCoordRet.add(coordinate1);
+        queue.clear();
+        queue.add(coordinate1);
+        endOfPath = false;
+        while(!endOfPath){
+            Coordinate c    = queue.poll();
+            Coordinate cMin = null;
+            int dMin        = 1000;
+            for(Coordinate neighbor : getNeighbors(c)){
+                if((neighbor.getCol() == coordinate.getCol()) && (neighbor.getRow() == coordinate.getRow()))
+                    endOfPath = true;
+                if(distance[neighbor.getRow()][neighbor.getCol()] != -1 && distance[neighbor.getRow()][neighbor.getCol()] < dMin){
+                    dMin = distance[neighbor.getRow()][neighbor.getCol()];
+                    cMin = neighbor;
+                }
+            }
+            queue.add(cMin);
+            lCoordRet.add(cMin);
+        }
+        Collections.reverse(lCoordRet); // pour retourner le chemin dans le bon sens
+        return lCoordRet;
     }
 
     @Override
