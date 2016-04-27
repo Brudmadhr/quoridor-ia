@@ -62,7 +62,6 @@ public class BRUDMADHR implements PlayerModule {
         Set<Coordinate> setCoordRet = new HashSet<>();
         int row = coordinate.getRow();
         int col = coordinate.getCol();
-        // TODO : test murs
         if(quoridorBoard.deplacementN(row,col)){ // N
             setCoordRet.add(new Coordinate(row-1,col));
         }
