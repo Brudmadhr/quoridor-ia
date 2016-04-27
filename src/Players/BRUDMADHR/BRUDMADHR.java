@@ -17,8 +17,7 @@ public class BRUDMADHR implements PlayerModule {
     private Map<Integer,Coordinate> playersCoord;
     private Map<Integer,Integer>    playersNbWalls;
     private ArrayList<Wall>         wallsCoordinate;
-
-    private Graph board;
+    private HashMap<Coordinate,Adjacent>              adjacentMatrix;
 
     @Override
     public void init(Logger logger, int i, int i1, Map<Integer, Coordinate> map) {
@@ -36,26 +35,35 @@ public class BRUDMADHR implements PlayerModule {
 
         wallsCoordinate = new ArrayList<>();
 
-        // Construction du graphe
-        List<Vertex> lVertex = new ArrayList<>();
-        // Construction sommet
-        for(int k = 0; k<Coordinate.BOARD_DIM*Coordinate.BOARD_DIM;k++){
-            lVertex.add(new Vertex(Integer.toString(k+1),Integer.toString(k+1)));
-        }
-        for(Vertex v : lVertex){
-            int n = new Integer(v.getId());
-            // case à deux voisins (les quatre coins)
-            if(n==1 || n==Coordinate.BOARD_DIM || n==(Coordinate.BOARD_DIM-1)*Coordinate.BOARD_DIM || n==Coordinate.BOARD_DIM*Coordinate.BOARD_DIM){
-                
+        // Initialisation matrice d'adjacence
+    /*    adjacentMatrix = new HashMap<>();
+        for(int k=0;i<8;i++){
+            for(int l=0;l<8;l++){
+                Coordinate c = new Coordinate(k,l);
+                Adjacent a   = initAdjacence(c);
+                adjacentMatrix.put(c,a);
             }
-            // case à trois voisins
-            if(){
-
-            }
-            // case à quatre voisins
-
-        }
+        }*/
     }
+
+  /*  private Adjacent initAdjacence(Coordinate c){
+        List<Coordinate> lCoordRet = new List<>();
+        int row = c.getRow();
+        int col = c.getCol();
+        if(row-1>=0 ){ // N
+            lCoordRet.add(new Coordinate(row-1,col));
+        }
+        if(row+1<coordinate.BOARD_DIM){ // S
+            setCoordRet.add(new Coordinate(row+1,col));
+        }
+        if(col-1>=0){ // O
+            setCoordRet.add(new Coordinate(row,col-1));
+        }
+        if(col+1<coordinate.BOARD_DIM) { // E
+            setCoordRet.add(new Coordinate(row, col + 1));
+        }
+        return setCoordRet;
+    }*/
 
     @Override
     public void lastMove(PlayerMove playerMove) {
@@ -67,7 +75,8 @@ public class BRUDMADHR implements PlayerModule {
             // diminution du nombre de murs du joueur
             playersNbWalls.put(playerId, getWallsRemaining(playerId) - 1);
             // ajout du mur dans la liste des murs
-            Wall e = new Wall(playerMove.getStart(),playerMove.getEnd());
+            Wall e  = new Wall(playerMove.getStart(),playerMove.getEnd());
+           // Wall e1 = new Wall()
             wallsCoordinate.add(e);
         }
         System.out.print(playerMove);
@@ -84,7 +93,7 @@ public class BRUDMADHR implements PlayerModule {
         int row = coordinate.getRow();
         int col = coordinate.getCol();
         // TODO : test murs
-        if(coordinate.getRow()-1>=0 ){ // N
+        if(row-1>=0 ){ // N
             setCoordRet.add(new Coordinate(row-1,col));
         }
         if(row+1<coordinate.BOARD_DIM){ // S
@@ -101,9 +110,6 @@ public class BRUDMADHR implements PlayerModule {
 
     @Override
     public List<Coordinate> getShortestPath(Coordinate coordinate, Coordinate coordinate1) {
-       // Graph g = new Graph(null,null);
-        //DijkstraAlgorithm d = new DijkstraAlgorithm(g);
-
         return null;
     }
 

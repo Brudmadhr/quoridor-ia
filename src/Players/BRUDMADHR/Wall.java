@@ -6,7 +6,7 @@ import Interface.Coordinate;
  * Created by brudmadhr on 06/04/16.
  */
 public class Wall {
-    final int WIDTH = 2;
+    //final int WIDTH = 2;
     private Coordinate deb;
     private Coordinate fin;
 

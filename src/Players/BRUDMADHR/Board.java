@@ -34,15 +34,15 @@ public class Board {
     }
 
     public boolean deplacementN(int i, int j){
-        return (i-1>=0 && (board[i][j] >> 4 == 0) );
+        return (i-1>=0 && ( (board[i][j] & 8) == 0) );
     }
     public boolean deplacementE(int i, int j){
-        return (j+1<BOARD_SIZE && (board[i][j] >> 4 == 0) );
+        return (j+1<BOARD_SIZE && ( (board[i][j] & 4) == 0) );
     }
     public boolean deplacementS(int i, int j){
-        return (i+1<BOARD_SIZE && (board[i][j] >> 4 == 0) );
+        return (i+1<BOARD_SIZE && ( (board[i][j] & 2) == 0) );
     }
     public boolean deplacementO(int i, int j){
-        return (j-1>=0 && (board[i][j] >> 4 == 0) );
+        return (j-1>=0 && ( (board[i][j] & 1) == 0) );
     }
 }
