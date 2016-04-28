@@ -1,4 +1,5 @@
 package Players.Brudmadhr;
+
 import Engine.Logger;
 import Interface.Coordinate;
 import Interface.PlayerModule;
@@ -29,7 +30,8 @@ public class Brudmadhr implements PlayerModule {
 
         playersNbWalls = new HashMap<>();
         for (Integer in : playersCoord.keySet()) {
-            if(playersCoord.keySet().size()==2) playersNbWalls.put(in, 10); // 10 murs par défaut au début du jeu si 2 joueurs
+            if (playersCoord.keySet().size() == 2)
+                playersNbWalls.put(in, 10); // 10 murs par défaut au début du jeu si 2 joueurs
             else playersNbWalls.put(in, 5); // 5 sinon
 
         }
@@ -160,43 +162,100 @@ public class Brudmadhr implements PlayerModule {
         return sRet;
     }
 
-    private Set<PlayerMove> getAllPieceMoves(){
+    private Set<PlayerMove> getAllPieceMoves() {
         Set<PlayerMove> sRet = new HashSet<>();
-        for(Coordinate neighbor : getNeighbors(getPlayerLocation(myId))){
+        for (Coordinate neighbor : getNeighbors(getPlayerLocation(myId))) {
             Coordinate finalPosition = neighbor; // destination possible
             // test si adversaire sur case voisine
-            for(Integer playerId : playersCoord.keySet()){
+            for (Integer playerId : playersCoord.keySet()) {
                 Coordinate opponentPosition = getPlayerLocation(playerId);
                 int i = opponentPosition.getRow();
                 int j = opponentPosition.getCol();
-                if(playerId != myId && i == neighbor.getRow() && j == neighbor.getCol()){
+                if (playerId != myId && i == neighbor.getRow() && j == neighbor.getCol()) {
                     /* on a un adversaire à côté de nous on peut éventuellement le sauter :
                      *  - s'il n'est pas sur un bord
                      *  - s'il n'y a pas de mur derrière lui
                      *  les méthodes de la classes board vérifient cela !
                      */
-                    if(quoridorBoard.deplacementN(i,j)) finalPosition = new Coordinate(i-1,j);
-                    if(quoridorBoard.deplacementE(i,j)) finalPosition = new Coordinate(i,j+1);
-                    if(quoridorBoard.deplacementS(i,j)) finalPosition = new Coordinate(i+1,j);
-                    if(quoridorBoard.deplacementO(i,j)) finalPosition = new Coordinate(i,j-1);
+                    if (quoridorBoard.deplacementN(i, j)) finalPosition = new Coordinate(i - 1, j);
+                    if (quoridorBoard.deplacementE(i, j)) finalPosition = new Coordinate(i, j + 1);
+                    if (quoridorBoard.deplacementS(i, j)) finalPosition = new Coordinate(i + 1, j);
+                    if (quoridorBoard.deplacementO(i, j)) finalPosition = new Coordinate(i, j - 1);
 
                 }
             }
-            sRet.add(new PlayerMove(myId,true,getPlayerLocation(myId),finalPosition)); // on ajoute le coup possible à la liste
+            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition)); // on ajoute le coup possible à la liste
         }
         return sRet;
     }
 
-    private Set<PlayerMove> getAllWallsMoves(){
+    //TODO : partie 2 finie après cette méthode
+    private Set<PlayerMove> getAllWallsMoves() {
         /* une pose de mur est valide ssi :
          *  1) le joueur a encore au moins un mur
-         *  2) la pose de ce mur n'empeche pas tous les joueurs à avoir au moins un chemin possible pour gagner
-         *  3) si les murs ne se croisent pas
+         *  2) si les murs ne se croisent pas
+         *  3) la pose de ce mur n'empeche pas tous les joueurs à avoir au moins un chemin possible pour gagner
          */
         Set<PlayerMove> sRet = new HashSet<>();
-        if(getWallsRemaining(myId) == 0) return sRet; // condition 1
+        if (getWallsRemaining(myId) == 0) return sRet; // condition 1
 
+        /* Condition 2 : on construit la liste des murs possible pour ensuite l'appliquer à la condition 3
+
+        boolean wallOk = true;
+        /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose
+         */
+        for (Integer player : playersCoord.keySet()) {
+             /* objectif différent pour chaque joueur
+              * joueur 1 commence en bas // joueur 2  en haut // joueur 3 à gauche // joueur 4 à droite
+              */
+            switch (getID()) {
+                case 1: {
+                    if (!wallIsNotBlockingPath(player, 0, true)) {
+                        wallOk = false;
+                    }
+                    break;
+                }
+                case 2: {
+                    if (!wallIsNotBlockingPath(player, 9, true)) {
+                        wallOk = false;
+                    }
+                    break;
+                }
+                case 3: {
+                    if (!wallIsNotBlockingPath(player, 9, false)) {
+                        wallOk = false;
+                    }
+                    break;
+                }
+                case 4:
+                    if (!wallIsNotBlockingPath(player, 0, false)) {
+                        wallOk = false;
+                    }
+                    break;
+                default:
+                    wallOk = false;
+                    break;
+            }
+        }
         return sRet;
+    }
+
+    private boolean wallIsNotBlockingPath(int playerId, int pos, boolean b) {
+        boolean bRet = true;
+        if (b) { // gestion joueur 1/2
+            for (int c = 0; c < quoridorBoard.BOARD_SIZE; c++) {
+                if (getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size() == 0) {
+                    bRet = false;
+                }
+            }
+        } else { // gestion joueur 3/4
+            for (int c = 0; c < quoridorBoard.BOARD_SIZE; c++) {
+                if (getShortestPath(getPlayerLocation(playerId), new Coordinate(c, pos)).size() == 0) {
+                    bRet = false;
+                }
+            }
+        }
+        return bRet;
     }
 
     @Override
@@ -211,6 +270,9 @@ public class Brudmadhr implements PlayerModule {
     public void playerInvalidated(int i) {
         playersCoord.remove(i);
     }
+
     @Override
-    public int getID() {return myId;}
+    public int getID() {
+        return myId;
+    }
 }
