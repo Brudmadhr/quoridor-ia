@@ -164,24 +164,26 @@ public class Brudmadhr implements PlayerModule {
 
     private Set<PlayerMove> getAllPieceMoves() {
         Set<PlayerMove> sRet = new HashSet<>();
-        for (Coordinate neighbor : getNeighbors(getPlayerLocation(myId))) {
+        for (Coordinate neighbor : getNeighbors(getPlayerLocation(myId))) { //cases voisines du joueur
             Coordinate finalPosition = neighbor; // destination possible
             // test si adversaire sur case voisine
             for (Integer playerId : playersCoord.keySet()) {
                 Coordinate opponentPosition = getPlayerLocation(playerId);
                 int i = opponentPosition.getRow();
                 int j = opponentPosition.getCol();
-                if (playerId != myId && i == neighbor.getRow() && j == neighbor.getCol()) {
+                if (playerId != myId && (i == neighbor.getRow() && j == neighbor.getCol())) {
                     /* on a un adversaire à côté de nous on peut éventuellement le sauter :
                      *  - s'il n'est pas sur un bord
                      *  - s'il n'y a pas de mur derrière lui
                      *  les méthodes de la classes board vérifient cela !
                      */
-                    if (quoridorBoard.deplacementN(i, j)) finalPosition = new Coordinate(i - 1, j);
-                    if (quoridorBoard.deplacementE(i, j)) finalPosition = new Coordinate(i, j + 1);
-                    if (quoridorBoard.deplacementS(i, j)) finalPosition = new Coordinate(i + 1, j);
-                    if (quoridorBoard.deplacementO(i, j)) finalPosition = new Coordinate(i, j - 1);
-
+                	if(getPlayerLocation(myId).getRow()==getPlayerLocation(playerId).getRow() && playerId != myId){
+                		if (quoridorBoard.deplacementE(i, j)) finalPosition = new Coordinate(i, j + 1);
+                		if (quoridorBoard.deplacementO(i, j)) finalPosition = new Coordinate(i, j - 1);
+                	}else if(getPlayerLocation(myId).getCol()==getPlayerLocation(playerId).getCol() && playerId != myId){
+                		if (quoridorBoard.deplacementN(i, j)) finalPosition = new Coordinate(i - 1, j);
+                		if (quoridorBoard.deplacementS(i, j)) finalPosition = new Coordinate(i + 1, j);
+                	}
                 }
             }
             sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition)); // on ajoute le coup possible à la liste
