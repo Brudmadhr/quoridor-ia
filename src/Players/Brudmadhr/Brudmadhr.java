@@ -198,71 +198,88 @@ public class Brudmadhr implements PlayerModule {
          *  2) si les murs ne se croisent pas
          *  3) la pose de ce mur n'empeche pas tous les joueurs à avoir au moins un chemin possible pour gagner
          */
-        Set<PlayerMove> sRet = new HashSet<>();
-        if (getWallsRemaining(myId) == 0) return sRet; // condition 1
 
-        /* Condition 2 : on construit la liste des murs possible pour ensuite l'appliquer à la condition 3 */
+        /* Condition 1 : il reste un mur au moins au joueur à placer */
+        Set<PlayerMove> sRet = new HashSet<>();
+        if (getWallsRemaining(myId) == 0) return sRet;
+
+
+
+        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer à la condition 3 cad les murs ne se croisent pas  */
+
+
 
 
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose
          */
-        boolean wallOk = true;
-        for (Integer player : playersCoord.keySet()) {
-             /* objectif différent pour chaque joueur
-              * joueur 1 commence en bas // joueur 2  en haut // joueur 3 à gauche // joueur 4 à droite
-              */
-            switch (getID()) {
-                case 1: {
-                    if (!wallIsNotBlockingPath(player, 0, true)) {
-                        wallOk = false;
+        for (PlayerMove playermove : sRet) {
+
+
+            boolean wallOk = true;
+            for (Integer player : playersCoord.keySet()) {
+                /* objectif différent pour chaque joueur
+                * joueur 1 commence en bas // joueur 2  en haut // joueur 3 à gauche // joueur 4 à droite
+                */
+                switch (getID()) {
+                    case 1: {
+                        if (wallIsBlockingPath(player, 0, true)) {
+                            wallOk = false;
+                        }
+                        break;
                     }
-                    break;
+                    case 2: {
+                        if (wallIsBlockingPath(player, 9, true)) {
+                            wallOk = false;
+                        }
+                        break;
+                    }
+                    case 3: {
+                        if (wallIsBlockingPath(player, 9, false)) {
+                            wallOk = false;
+                        }
+                        break;
+                    }
+                    case 4:
+                        if (wallIsBlockingPath(player, 0, false)) {
+                            wallOk = false;
+                        }
+                        break;
+                    default:
+                        wallOk = false;
+                        break;
                 }
-                case 2: {
-                    if (!wallIsNotBlockingPath(player, 9, true)) {
-                        wallOk = false;
-                    }
-                    break;
-                }
-                case 3: {
-                    if (!wallIsNotBlockingPath(player, 9, false)) {
-                        wallOk = false;
-                    }
-                    break;
-                }
-                case 4:
-                    if (!wallIsNotBlockingPath(player, 0, false)) {
-                        wallOk = false;
-                    }
-                    break;
-                default:
-                    wallOk = false;
-                    break;
             }
         }
         return sRet;
     }
+
     /* playerId : id du joueur
      * pos      : l'endroit (indice de la ligne ou colonne selon la valeur de b) où le joueur doit arriver pour gagner
      * b        : si b=true il doit arriver sur une ligne sinon sur une colonne
      */
-    private boolean wallIsNotBlockingPath(int playerId, int pos, boolean b) {
+    private boolean wallIsBlockingPath(int playerId, int pos, boolean b) {
         boolean bRet = true;
         if (b) { // gestion joueur 1/2
             for (int c = 0; c < quoridorBoard.BOARD_SIZE; c++) {
-                if (getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size() == 0) {
+                if (getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size() == 0) { // Impossbilité de trouver un chemin jsuqu'à la case (0,c) ou (9,c)
+                    bRet = true;
+                }else {
                     bRet = false;
-                }
+                    break;
+                } // On a trouvé un chemin possible
             }
         } else { // gestion joueur 3/4
             for (int c = 0; c < quoridorBoard.BOARD_SIZE; c++) {
-                if (getShortestPath(getPlayerLocation(playerId), new Coordinate(c, pos)).size() == 0) {
+                if (getShortestPath(getPlayerLocation(playerId), new Coordinate(c, pos)).size() == 0) { // Impossibilité de trouver un chemin jusqu'à la case (c,0) ou (c,9)
+                    bRet = true;
+                }else{
                     bRet = false;
+                    break; // On a trouvé un chemin possible
                 }
             }
         }
-        return bRet;
-    }
+            return bRet;
+     }
 
     @Override
     public PlayerMove move() {
