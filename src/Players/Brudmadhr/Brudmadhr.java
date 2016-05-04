@@ -199,11 +199,12 @@ public class Brudmadhr implements PlayerModule {
         Set<PlayerMove> sRet = new HashSet<>();
         if (getWallsRemaining(myId) == 0) return sRet; // condition 1
 
-        /* Condition 2 : on construit la liste des murs possible pour ensuite l'appliquer à la condition 3
+        /* Condition 2 : on construit la liste des murs possible pour ensuite l'appliquer à la condition 3 */
 
-        boolean wallOk = true;
+
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose
          */
+        boolean wallOk = true;
         for (Integer player : playersCoord.keySet()) {
              /* objectif différent pour chaque joueur
               * joueur 1 commence en bas // joueur 2  en haut // joueur 3 à gauche // joueur 4 à droite
@@ -239,7 +240,10 @@ public class Brudmadhr implements PlayerModule {
         }
         return sRet;
     }
-
+    /* playerId : id du joueur
+     * pos      : l'endroit (indice de la ligne ou colonne selon la valeur de b) où le joueur doit arriver pour gagner
+     * b        : si b=true il doit arriver sur une ligne sinon sur une colonne
+     */
     private boolean wallIsNotBlockingPath(int playerId, int pos, boolean b) {
         boolean bRet = true;
         if (b) { // gestion joueur 1/2

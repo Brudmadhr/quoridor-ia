@@ -3,7 +3,7 @@
 
 # Your API key
 # Get one at https://games.cs.rit.edu/quoridorapi/getapikey/
-API_KEY 6448a1e90814e8
+#API_KEY
 
 ########################### MAIN GAME CONFIG ###############################
 

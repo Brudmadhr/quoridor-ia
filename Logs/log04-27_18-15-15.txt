@@ -1,0 +1,5 @@
+04-27 18:15:15 Engine Quoridor Java Client v1.0.9 by RIT CS Department starting up
+04-27 18:15:15 Engine Loading player Brudmadhr
+04-27 18:15:15 Engine Loading player RandomPlayer
+04-27 18:15:15 Engine Loaded 2 players
+04-27 18:15:16 Engine Error: Error during game initialization

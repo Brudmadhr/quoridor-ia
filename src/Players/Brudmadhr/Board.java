@@ -4,9 +4,10 @@ package Players.Brudmadhr;
  * Created by brudmadhr on 20/04/16.
  */
 public class Board {
-    final int BOARD_SIZE = 9;
+    final int BOARD_SIZE = 9; // plateau quoridor 9x9
     private byte[][] board;
 
+    // Un tableau 9*9 , un byte pour modéliser les murs entre chaque case (1 bit pour chaque direction)
     public Board(){
         board = new byte[BOARD_SIZE][BOARD_SIZE];
     }
