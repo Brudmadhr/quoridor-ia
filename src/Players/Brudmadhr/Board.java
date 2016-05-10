@@ -1,5 +1,5 @@
 package Players.Brudmadhr;
-import java.Arrays
+import java.util.Arrays;
 
 /**
  * Created by brudmadhr on 20/04/16.
@@ -44,18 +44,19 @@ public class Board {
 	    		board[idep][jdep+1]  = (byte) (board[idep][jdep+1]     | 0b1000);
 	    		board[idep-1][jdep]  = (byte) (board[idep-1][jdep]     | 0b0010);
 	    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b0010);
-	    		collision[idep][jdep-1]=true; // ajout de l'intersection (milieu du mur)
+				intersections[idep][jdep-1]=true; // ajout de l'intersection (milieu du mur)
 	    	}else if(jdep == jarr){ // meme colonne
 	    		board[idep][jdep]    = (byte) (board[idep][jdep]       | 0b0001);
 	    		board[idep+1][jdep]  = (byte) (board[idep+1][jdep]     | 0b0001);
 	    		board[idep][jdep-1]  = (byte) (board[idep][jdep-1]     | 0b0100);
 	    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b0100);
-	    		collision[idep-1][jdep]=true; // ajout de l'intersection (milieu du mur)
+				intersections[idep-1][jdep]=true; // ajout de l'intersection (milieu du mur)
 	    	}else{
 	    		System.err.println("Impossible de placer un mur a cet endroit!");
 	    		return false;
 	    	}
 	    }
+		return true;
     }
     
     public boolean wallCollisionEdges(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un bord
@@ -68,11 +69,11 @@ public class Board {
     
     public boolean wallCollisionWall(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un autre mur
     	if(idep == iarr){ // meme ligne
-    		if(collisions[idep-1][jdep]){
+    		if(intersections[idep-1][jdep]){
     			return true;
     		}
     	}else if(jdep == jarr){ // meme colonne
-    		if(collisions[idep][jdep-1]){
+    		if(intersections[idep][jdep-1]){
     			return true;
     		}
     	}

@@ -191,7 +191,6 @@ public class Brudmadhr implements PlayerModule {
         return sRet;
     }
 
-    //TODO : partie 2 finie après cette méthode
     private Set<PlayerMove> getAllWallsMoves() {
         /* une pose de mur est valide ssi :
          *  1) le joueur a encore au moins un mur
@@ -203,18 +202,24 @@ public class Brudmadhr implements PlayerModule {
         Set<PlayerMove> sRet = new HashSet<>();
         if (getWallsRemaining(myId) == 0) return sRet;
 
-
-
         /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer à la condition 3 cad les murs ne se croisent pas  */
-
-
+        for(int i=1;i<quoridorBoard.BOARD_SIZE-1;i++){
+            for(int j=1;j<quoridorBoard.BOARD_SIZE-1;j++){
+                // vérification mur valide horizontal
+                if(!quoridorBoard.wallCollisionEdges(i-1,j,i+1,j) && !quoridorBoard.wallCollisionWall(i-1,j,i+1,j)){
+                    sRet.add(new PlayerMove(myId,false,new Coordinate(i-1,j),new Coordinate(i+1,j)));
+                }
+                //vertical
+                if(!quoridorBoard.wallCollisionEdges(i,j-1,i,j+1) && !quoridorBoard.wallCollisionWall(i,j-1,i,j+1)){
+                    sRet.add(new PlayerMove(myId,false,new Coordinate(i,j+1),new Coordinate(i,j+1)));
+                }
+            }
+        }
 
 
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose
          */
         for (PlayerMove playermove : sRet) {
-
-
             boolean wallOk = true;
             for (Integer player : playersCoord.keySet()) {
                 /* objectif différent pour chaque joueur
@@ -249,6 +254,8 @@ public class Brudmadhr implements PlayerModule {
                         break;
                 }
             }
+            // si mur invalide on l'enlève de la liste à retourner
+            if(!wallOk){ sRet.remove(playermove); }
         }
         return sRet;
     }
