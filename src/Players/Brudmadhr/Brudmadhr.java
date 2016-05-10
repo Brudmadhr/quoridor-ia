@@ -36,7 +36,7 @@ public class Brudmadhr implements PlayerModule {
 
         }
 
-        quoridorBoard = new Board();
+        quoridorBoard = new Board(this);
     }
 
 
@@ -297,6 +297,7 @@ public class Brudmadhr implements PlayerModule {
         // implémentation random pour l'instant
         List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
         Collections.shuffle(moves);
+        quoridorBoard.toString();
         return moves.get(0);
     }
 
@@ -333,21 +334,21 @@ public class Brudmadhr implements PlayerModule {
     	if(getID()==1){
     		for(int i =0; i<9; i++){ 
     			goal_you = new Coordinate(0,i);
-    			path_you = getShortestPath(getPlayerLocation(1),goal_you).length();
+    			path_you = getShortestPath(getPlayerLocation(1),goal_you).size();
     			score_you = ( path_you < score_you) ? path_you : score_you;
     			
     			goal_adv = new Coordinate(8,i);
-    			path_adv = getShortestPath(getPlayerLocation(2),goal_adv).length();
+    			path_adv = getShortestPath(getPlayerLocation(2),goal_adv).size();
     			score_adv = ( path_adv < score_adv) ? path_adv : score_adv;
     		}
     	}else{ // player est le joueur 2
     		for(int i =0; i<9; i++){
     			goal_you = new Coordinate(8,i);
-    			path_you = getShortestPath(getPlayerLocation(2),goal_you).length();
+    			path_you = getShortestPath(getPlayerLocation(2),goal_you).size();
     			score_you = ( path_you < score_you) ? path_you : score_you;
     			
     			goal_adv = new Coordinate(0,i);
-    			path_adv = getShortestPath(getPlayerLocation(1),goal_adv).length();
+    			path_adv = getShortestPath(getPlayerLocation(1),goal_adv).size();
     			score_adv = ( path_adv < score_adv) ? path_adv : score_adv;
     		}
     	}

@@ -1,5 +1,5 @@
 package Players.Brudmadhr;
-import java.util.Arrays;
+import Interface.Coordinate;
 
 /**
  * Created by brudmadhr on 20/04/16.
@@ -8,9 +8,10 @@ public class Board {
     final int BOARD_SIZE = 9; // plateau quoridor 9x9
     private byte[][] board;
     private boolean[][] intersections;
-
+    private Brudmadhr ia;
     // Un tableau 9*9 , un byte pour modéliser les murs entre chaque case (1 bit pour chaque direction)
-    public Board(){
+    public Board(Brudmadhr b){
+        ia = b;
         board = new byte[BOARD_SIZE][BOARD_SIZE];
         intersections = new boolean[BOARD_SIZE][BOARD_SIZE];
         for(int i=0;i<BOARD_SIZE;i++)
@@ -60,5 +61,22 @@ public class Board {
     
     public boolean wallCollisionWall(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un autre mur
     	return intersections[(idep+iarr)/2][(jdep+jarr)/2];
+    }
+
+    public String toString(){
+        String sRet = "";
+        for(int i=0;i<BOARD_SIZE;i++){
+            for(int j=0;j<BOARD_SIZE;j++){
+                for(Integer player : ia.getPlayerLocations().keySet()){
+                    Coordinate posPlayer = ia.getPlayerLocation(player);
+                    if(posPlayer.getRow() == i && posPlayer.getCol() == j){
+                        System.out.print(player);
+                    }
+                    else{ System.out.print(". "); }
+                }
+            }
+            System.out.println();
+        }
+        return sRet;
     }
 }
