@@ -76,7 +76,11 @@ public class Brudmadhr implements PlayerModule {
         }
         return setCoordRet;
     }
-
+    
+    /**
+     * coordinate : position actuelle
+     * coordinate1 : position a atteindre
+     */
     @Override
     public List<Coordinate> getShortestPath(Coordinate coordinate, Coordinate coordinate1) {
         Queue<Coordinate> queue = new LinkedList<>(); // file des voisins
@@ -304,5 +308,49 @@ public class Brudmadhr implements PlayerModule {
     @Override
     public int getID() {
         return myId;
+    }
+    
+    /**
+     * Fonction de calcul de l'heuristique dans un cadre 1v1
+     * 
+     * On suppose que le joueur 1 (id=1) doit aller en haut du plateau (row==0)
+     * On suppose que le joueur 2 (id=2) doit aller en haut du plateau (row==8)
+     */
+    public int evaluate(){
+    	int score_you = 1000; // pour minimiser et trouver le plus court chemin gagnant
+    	int score_adv = 1000; // idem
+    	
+    	int path_you;
+    	int path_adv;
+    	
+    	Coordinate goal_you;
+    	Coordinate goal_adv;
+    	
+    	
+    	// astuce a eventuellement implementer : 
+    	// ajouter une case de row -1 (resp 9) dont toutes les cases de row 0 (resp 8) sont voisines
+    	// cela permettrait de ne pas faire la boucle sur les 9 cases
+    	if(getID()==1){
+    		for(int i =0; i<9; i++){ 
+    			goal_you = new Coordinate(0,i);
+    			path_you = getShortestPath(getPlayerLocation(1),goal_you).length();
+    			score_you = ( path_you < score_you) ? path_you : score_you;
+    			
+    			goal_adv = new Coordinate(8,i);
+    			path_adv = getShortestPath(getPlayerLocation(2),goal_adv).length();
+    			score_adv = ( path_adv < score_adv) ? path_adv : score_adv;
+    		}
+    	}else{ // player est le joueur 2
+    		for(int i =0; i<9; i++){
+    			goal_you = new Coordinate(8,i);
+    			path_you = getShortestPath(getPlayerLocation(2),goal_you).length();
+    			score_you = ( path_you < score_you) ? path_you : score_you;
+    			
+    			goal_adv = new Coordinate(0,i);
+    			path_adv = getShortestPath(getPlayerLocation(1),goal_adv).length();
+    			score_adv = ( path_adv < score_adv) ? path_adv : score_adv;
+    		}
+    	}
+    	return score_adv-score_you;
     }
 }
