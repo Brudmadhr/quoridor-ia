@@ -13,22 +13,16 @@ public class Board {
     public Board(){
         board = new byte[BOARD_SIZE][BOARD_SIZE];
         intersections = new boolean[BOARD_SIZE][BOARD_SIZE];
-        Arrays.fill(intersections, Boolean.FALSE);
+        for(int i=0;i<BOARD_SIZE;i++)
+            for(int j=0;j<BOARD_SIZE;j++)
+                intersections[i][j]=false;
     }
 
     // Représentation mur : bit 1 = N bit 2 = E bit 3 = S bit 4 = O
-    public boolean deplacementN(int i, int j){
-        return (i-1>=0         && ( (board[i][j] & 8) == 0) );
-    }
-    public boolean deplacementE(int i, int j){
-        return (j+1<BOARD_SIZE && ( (board[i][j] & 4) == 0) );
-    }
-    public boolean deplacementS(int i, int j){
-        return (i+1<BOARD_SIZE && ( (board[i][j] & 2) == 0) );
-    }
-    public boolean deplacementO(int i, int j){
-        return (j-1>=0         && ( (board[i][j] & 1) == 0) );
-    }
+    public boolean deplacementN(int i, int j){  return (i-1>=0         && ( (board[i][j] & 8) == 0) );}
+    public boolean deplacementE(int i, int j){  return (j+1<BOARD_SIZE && ( (board[i][j] & 4) == 0) );}
+    public boolean deplacementS(int i, int j){  return (i+1<BOARD_SIZE && ( (board[i][j] & 2) == 0) );}
+    public boolean deplacementO(int i, int j){  return (j-1>=0         && ( (board[i][j] & 1) == 0) );}
 
     public byte[][] getBoard(){return board;}
     
@@ -44,39 +38,27 @@ public class Board {
 	    		board[idep][jdep+1]  = (byte) (board[idep][jdep+1]     | 0b1000);
 	    		board[idep-1][jdep]  = (byte) (board[idep-1][jdep]     | 0b0010);
 	    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b0010);
-				intersections[idep][jdep-1]=true; // ajout de l'intersection (milieu du mur)
+				intersections[(idep+iarr)/2][(jdep+jarr)/2]=true; // ajout de l'intersection (milieu du mur)
 	    	}else if(jdep == jarr){ // meme colonne
 	    		board[idep][jdep]    = (byte) (board[idep][jdep]       | 0b0001);
 	    		board[idep+1][jdep]  = (byte) (board[idep+1][jdep]     | 0b0001);
 	    		board[idep][jdep-1]  = (byte) (board[idep][jdep-1]     | 0b0100);
 	    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b0100);
-				intersections[idep-1][jdep]=true; // ajout de l'intersection (milieu du mur)
+                intersections[(idep+iarr)/2][(jdep+jarr)/2]=true; // ajout de l'intersection (milieu du mur)
 	    	}else{
 	    		System.err.println("Impossible de placer un mur a cet endroit!");
 	    		return false;
 	    	}
 	    }
+        else{ return false; }
 		return true;
     }
     
     public boolean wallCollisionEdges(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un bord
-    	if(idep<0 || iarr>BOARD_SIZE || jdep<0 || jarr>BOARD_SIZE){
-    		return true;
-    	}else{
-    		return true;
-    	}
+    	return (idep<0 || iarr>BOARD_SIZE || jdep<0 || jarr>BOARD_SIZE);
     }
     
     public boolean wallCollisionWall(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un autre mur
-    	if(idep == iarr){ // meme ligne
-    		if(intersections[idep-1][jdep]){
-    			return true;
-    		}
-    	}else if(jdep == jarr){ // meme colonne
-    		if(intersections[idep][jdep-1]){
-    			return true;
-    		}
-    	}
-    	return false;
+    	return intersections[(idep+iarr)/2][(jdep+jarr)/2];
     }
 }
