@@ -7,6 +7,10 @@ import Interface.PlayerMove;
 
 import java.util.*;
 
+// TODO : verifier règle saut fonctionnelle (ne semble pas)
+// TODO : problème pose mur (~75%)
+// TODO : gestion quand on est joueur 2
+
 /**
  * Created by brudmadhr on 05/04/16.
  */
@@ -204,18 +208,18 @@ public class Brudmadhr implements PlayerModule {
 
         /* Condition 1 : il reste un mur au moins au joueur à placer */
         Set<PlayerMove> sRet = new HashSet<>();
-        if (getWallsRemaining(myId) == 0) return sRet;
+        if (getWallsRemaining(myId) == 0){return sRet;}
 
         /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer à la condition 3 cad les murs ne se croisent pas  */
-        for(int i=1;i<quoridorBoard.BOARD_SIZE-1;i++){
-            for(int j=1;j<quoridorBoard.BOARD_SIZE-1;j++){
+        for(int i=1;i<quoridorBoard.BOARD_SIZE-2;i++){
+            for(int j=1;j<quoridorBoard.BOARD_SIZE-2;j++){
                 // vérification mur valide horizontal
-                if(!quoridorBoard.wallCollisionEdges(i-1,j,i+1,j) && !quoridorBoard.wallCollisionWall(i-1,j,i+1,j)){
-                    sRet.add(new PlayerMove(myId,false,new Coordinate(i-1,j),new Coordinate(i+1,j)));
+                if(j!=8 && !quoridorBoard.wallCollisionEdges(i,j,i,j+2) && !quoridorBoard.wallCollisionWall(i,j,i,j+2)){
+                    sRet.add(new PlayerMove(myId,false,new Coordinate(i,j),new Coordinate(i,j+2)));
                 }
                 //vertical
-                if(!quoridorBoard.wallCollisionEdges(i,j-1,i,j+1) && !quoridorBoard.wallCollisionWall(i,j-1,i,j+1)){
-                    sRet.add(new PlayerMove(myId,false,new Coordinate(i,j+1),new Coordinate(i,j+1)));
+                if(i!=8 && !quoridorBoard.wallCollisionEdges(i,j,i+2,j) && !quoridorBoard.wallCollisionWall(i,j,i+2,j)){
+                    sRet.add(new PlayerMove(myId,false,new Coordinate(i,j),new Coordinate(i+2,j)));
                 }
             }
         }
@@ -297,7 +301,7 @@ public class Brudmadhr implements PlayerModule {
         // implémentation random pour l'instant
         List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
         Collections.shuffle(moves);
-        quoridorBoard.toString();
+        //quoridorBoard.toString();
         return moves.get(0);
     }
 

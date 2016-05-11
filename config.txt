@@ -10,7 +10,7 @@ API_KEY rennes1
 # List of player modules separated by commas (no spaces between!).
 # The number of modules listed here specifies the number of players in the game
 # To play via the GUI, use Human.
-PLAYER_MODULES Brudmadhr,RandomPlayer
+PLAYER_MODULES Brudmadhr,EasyPlayer
 
 # Does the graphical UI display?
 UI True
@@ -36,7 +36,7 @@ FILE_LOGGING True
 STDOUT_LOGGING True
 
 # Moves to make before players get control (abide to PlayerMove constructs)
-#PRE_MOVE PlayerMove(1,False,7,3,7,5)
+
 
 ################################# ADVANCED #################################
 

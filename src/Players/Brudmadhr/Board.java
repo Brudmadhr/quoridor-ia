@@ -60,7 +60,9 @@ public class Board {
     }
     
     public boolean wallCollisionWall(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un autre mur
-    	return intersections[(idep+iarr)/2][(jdep+jarr)/2];
+    	return  intersections[(idep+iarr)/2][(jdep+jarr)/2]  || // cas croisé
+                intersections[idep][jdep]                    ||
+                intersections[iarr][jarr];                        // cas deux murs même lig ou meme col
     }
 
     public String toString(){
