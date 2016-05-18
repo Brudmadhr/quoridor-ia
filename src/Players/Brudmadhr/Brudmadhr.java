@@ -18,6 +18,7 @@ public class Brudmadhr implements PlayerModule {
 
     private Logger logger;
     private int myId;
+    private int opponentId;
     private int myNbWalls;
     private Map<Integer, Coordinate> playersCoord;
     private Map<Integer, Integer> playersNbWalls;
@@ -27,6 +28,7 @@ public class Brudmadhr implements PlayerModule {
     public void init(Logger logger, int i, int i1, Map<Integer, Coordinate> map) {
         this.logger = logger;
         this.myId = i;
+        this.opponentId = (myId==1) ? 2 : 1;
         this.myNbWalls = i1;
 
         playersCoord = new HashMap<>();
@@ -358,4 +360,59 @@ public class Brudmadhr implements PlayerModule {
     	}
     	return score_adv-score_you;
     }
+    
+    PlayerMove move_minimax() {
+        List<Object> result = minimax(2, myId, Integer.MIN_VALUE, Integer.MAX_VALUE);
+           // depth, max-turn, alpha, beta
+        return result.get(1);  // returns best move
+     }
+   
+     /** Minimax (recursive) at level of depth for maximizing or minimizing player
+         with alpha-beta cut-off. Return int[3] of {score, row, col}  */
+     private List<Object> minimax(int depth, int playerId, int alpha, int beta) {
+        // Generate possible next moves in a list of int[2] of {row, col}.
+        Set<PlayerMove> nextMoves = allPossibleMoves();
+   
+        // myId is maximizing; while opponentId is minimizing
+        int score;
+        playerMove move_player;
+  	  List<Object> answer = new ArrayList<Object>();
+   
+        if (nextMoves.isEmpty() || depth == 0) {
+           // Gameover or depth reached, evaluate score
+           score = evaluate();
+  		 answer.add(1, new PlayerMove(playerId, false, -1, -1));
+  		 answer.add(0, score);
+           return answer;
+        } else {
+           for (PlayerMove move : nextMoves) {
+              // try this move for the current "player"
+        	   
+              make(move); // fonction a implementer
+              
+              if (playerId == myId) {
+                 score = minimax(depth - 1, opponentId, alpha, beta).get(0);
+                 if (score > alpha) {
+                    alpha = score;
+                    move_player = move;
+                 }
+              } else { 
+                 score = minimax(depth - 1, myId, alpha, beta).get(0);
+                 if (score < beta) {
+                    beta = score;
+                    move_player = move;
+                 }
+              }
+              
+              // undo move
+              unmake(move); // fonction a implementer
+              
+              // cut-off
+              if (alpha >= beta) break;
+           }
+           answer.add(1, move_player);
+  		 answer.add(0, score);
+  		 return answer;
+        }
+     }
 }
