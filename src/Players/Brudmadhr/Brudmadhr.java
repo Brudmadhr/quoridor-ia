@@ -210,10 +210,10 @@ public class Brudmadhr implements PlayerModule {
         Set<PlayerMove> sRet = new HashSet<>();
         if (getWallsRemaining(myId) == 0){return sRet;}
 
-        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer à la condition 3 cad les murs ne se croisent pas  */
+        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
         for(int i=1;i<quoridorBoard.BOARD_SIZE-2;i++){
             for(int j=1;j<quoridorBoard.BOARD_SIZE-2;j++){
-                // vérification mur valide horizontal
+                // verification mur valide horizontal
                 if(j!=8 && !quoridorBoard.wallCollisionEdges(i,j,i,j+2) && !quoridorBoard.wallCollisionWall(i,j,i,j+2)){
                     sRet.add(new PlayerMove(myId,false,new Coordinate(i,j),new Coordinate(i,j+2)));
                 }
