@@ -361,6 +361,22 @@ public class Brudmadhr implements PlayerModule {
     	return score_adv-score_you;
     }
     
+    public void make(PlayerMove move){
+    	if(move.isMove()){
+    		playersCoord.put(move.getPlayerId(),new Coordinate(move.getEndRow(), move.getEndCol());
+    	}else{
+    		quoridorBoard.setWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
+    	}
+    }
+    
+    public void unmake(PlayerMove move){
+    	if(move.isMove()){
+    		playersCoord.put(move.getPlayerId(),new Coordinate(move.getStartRow(), move.getStartCol());
+    	}else{
+    		quoridorBoard.removeWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
+    	}
+    }
+    
     PlayerMove move_minimax() {
         List<Object> result = minimax(2, myId, Integer.MIN_VALUE, Integer.MAX_VALUE);
            // depth, max-turn, alpha, beta

@@ -55,6 +55,10 @@ public class Board {
 		return true;
     }
     
+    public void removeWall(int idep, int jdep, int iarr, int jarr){
+    	
+    }
+    
     public boolean wallCollisionEdges(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un bord
     	return (idep<0 || iarr>BOARD_SIZE || jdep<0 || jarr>BOARD_SIZE);
     }
