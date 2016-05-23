@@ -56,7 +56,7 @@ public class Board {
     }
     
     public void removeWall(int idep, int jdep, int iarr, int jarr){
-    	
+    	intersections[(idep+iarr)/2][(jdep+jarr)/2] = false;
     }
     
     public boolean wallCollisionEdges(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un bord
@@ -64,16 +64,16 @@ public class Board {
     }
     
     public boolean wallCollisionWall(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un autre mur
-    	boolean answer =  intersections[(idep+iarr)/2][(jdep+jarr)/2]  || // cas croisé
-                intersections[idep][jdep]                    ||
-                intersections[iarr][jarr]; // cas deux murs même lig ou meme col
-    	if(idep == iarr){ // meme ligne
-        	answer = answer || (board[idep][jdep] & 0b1000 == 0b1000) || // controle d'une eventuelle superposition avec autre mur
-        	(board[idep][jdep+1] & 0b1000 == 0b1000);
+    	boolean answer =  intersections[(idep+iarr)/2][(jdep+jarr)/2]; //|| // cas croisé
+               // intersections[idep][jdep]                    ||
+               // intersections[iarr][jarr]; // cas deux murs même lig ou meme col
+    	/*if(idep == iarr){ // meme ligne
+        	answer = answer || ((board[idep][jdep] & 0b1000) == 0b1000) || // controle d'une eventuelle superposition avec autre mur
+        	((board[idep][jdep+1] & 0b1000) == 0b1000);
     	}else if(jdep == jarr){
-    		answer = answer || (board[idep][jdep] & 0b0001 == 0b0001) ||
-    		(board[idep+1][jdep] & 0b0001 == 0b0001);
-    	}
+    		answer = answer || ((board[idep][jdep] & 0b0001) == 0b0001) ||
+            ((board[idep+1][jdep] & 0b0001) == 0b0001);
+    	}*/
     	return answer;
 	}
 

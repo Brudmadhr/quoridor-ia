@@ -7,9 +7,9 @@ import Interface.PlayerMove;
 
 import java.util.*;
 
-// TODO : verifier règle saut fonctionnelle (ne semble pas)
-// TODO : problème pose mur (~75%)
-// TODO : gestion quand on est joueur 2
+// TODO : verifier règle saut fonctionnelle (diagonale)
+// TODO : problème pose mur
+// TODO : gestion quand on est joueur 2 ?
 
 /**
  * Created by brudmadhr on 05/04/16.
@@ -168,12 +168,14 @@ public class Brudmadhr implements PlayerModule {
     public Set<PlayerMove> allPossibleMoves() {
         Set<PlayerMove> sRet = new HashSet<>();
         sRet.addAll(getAllPieceMoves());
-        sRet.addAll(getAllWallsMoves());
+       // sRet.addAll(getAllWallsMoves());
         return sRet;
     }
 
     private Set<PlayerMove> getAllPieceMoves() {
         Set<PlayerMove> sRet = new HashSet<>();
+        int myLig = getPlayerLocation(myId).getRow();
+        int myCol = getPlayerLocation(myId).getCol();
         for (Coordinate neighbor : getNeighbors(getPlayerLocation(myId))) { //cases voisines du joueur
             Coordinate finalPosition = neighbor; // destination possible
             // test si adversaire sur case voisine
@@ -187,16 +189,57 @@ public class Brudmadhr implements PlayerModule {
                      *  - s'il n'y a pas de mur derrière lui
                      *  les méthodes de la classes board vérifient cela !
                      */
-                	if(getPlayerLocation(myId).getRow()==getPlayerLocation(playerId).getRow() && playerId != myId){
+                	if(myLig==i){
+                        //EST
                 		if (quoridorBoard.deplacementE(i, j)) finalPosition = new Coordinate(i, j + 1);
+                            //DIAGONALE E
+                            else if(quoridorBoard.deplacementE(myLig-1,myCol)){
+                                finalPosition = new Coordinate(i-1,j+1);
+                                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+                            else if(quoridorBoard.deplacementE(myLig,myCol+1)){
+                                finalPosition = new Coordinate(i+1,j+1);
+                                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+                        //OUEST
                 		if (quoridorBoard.deplacementO(i, j)) finalPosition = new Coordinate(i, j - 1);
-                	}else if(getPlayerLocation(myId).getCol()==getPlayerLocation(playerId).getCol() && playerId != myId){
-                		if (quoridorBoard.deplacementN(i, j)) finalPosition = new Coordinate(i - 1, j);
-                		if (quoridorBoard.deplacementS(i, j)) finalPosition = new Coordinate(i + 1, j);
-                	}
+                            //DIAGONALE O
+                            else if(quoridorBoard.deplacementO(myLig-1,myCol)){
+                                finalPosition = new Coordinate(i-1,j-1);
+                                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+                            else if(quoridorBoard.deplacementO(myLig+1,myCol)){
+                                finalPosition = new Coordinate(i+1,j-1);
+                                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+
+                	}else if(myCol==j) {
+                        //NORD
+                        if (quoridorBoard.deplacementN(i, j)) {
+                            finalPosition = new Coordinate(i - 1, j);
+                        }
+                        //DIAGONALE N
+                        else if (quoridorBoard.deplacementN(myLig, myCol - 1)) {
+                            finalPosition = new Coordinate(i, j - 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        } else if (quoridorBoard.deplacementN(myLig, myCol + 1)) {
+                            finalPosition = new Coordinate(i, j + 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+                        //SUD
+                        if (quoridorBoard.deplacementS(i, j)) finalPosition = new Coordinate(i + 1, j);
+                            //DIAGONALE S
+                        else if (quoridorBoard.deplacementS(myLig, myCol - 1)) {
+                            finalPosition = new Coordinate(i + 1, j - 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        } else if (quoridorBoard.deplacementS(myLig, myCol + 1)) {
+                            finalPosition = new Coordinate(i + 1, j + 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+                    }
                 }
             }
-            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition)); // on ajoute le coup possible à la liste
+            if(!getPlayerLocation(myId).equals(finalPosition)) sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition)); // on ajoute le coup possible à la liste
         }
         return sRet;
     }
@@ -212,15 +255,15 @@ public class Brudmadhr implements PlayerModule {
         Set<PlayerMove> sRet = new HashSet<>();
         if (getWallsRemaining(myId) == 0){return sRet;}
 
-        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
-        for(int i=1;i<quoridorBoard.BOARD_SIZE-2;i++){
-            for(int j=1;j<quoridorBoard.BOARD_SIZE-2;j++){
+        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
+        for(int i=0;i<quoridorBoard.BOARD_SIZE;i++){
+            for(int j=0;j<quoridorBoard.BOARD_SIZE;j++){
                 // verification mur valide horizontal
-                if(j!=8 && !quoridorBoard.wallCollisionEdges(i,j,i,j+2) && !quoridorBoard.wallCollisionWall(i,j,i,j+2)){
+                if(i!=0 && i!=quoridorBoard.BOARD_SIZE && !quoridorBoard.wallCollisionEdges(i,j,i,j+2) && !quoridorBoard.wallCollisionWall(i,j,i,j+2)){
                     sRet.add(new PlayerMove(myId,false,new Coordinate(i,j),new Coordinate(i,j+2)));
                 }
                 //vertical
-                if(i!=8 && !quoridorBoard.wallCollisionEdges(i,j,i+2,j) && !quoridorBoard.wallCollisionWall(i,j,i+2,j)){
+                if(j!=0 && j!=quoridorBoard.BOARD_SIZE && !quoridorBoard.wallCollisionEdges(i,j,i+2,j) && !quoridorBoard.wallCollisionWall(i,j,i+2,j)){
                     sRet.add(new PlayerMove(myId,false,new Coordinate(i,j),new Coordinate(i+2,j)));
                 }
             }
@@ -301,10 +344,10 @@ public class Brudmadhr implements PlayerModule {
     @Override
     public PlayerMove move() {
         // implémentation random pour l'instant
-        List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
-        Collections.shuffle(moves);
+       // List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
+        //Collections.shuffle(moves);
         //quoridorBoard.toString();
-        return moves.get(0);
+        return new PlayerMove(myId,true,getPlayerLocation(myId),new Coordinate(getPlayerLocation(myId).getRow()-1,getPlayerLocation(myId).getCol()));
     }
 
     @Override
@@ -363,7 +406,7 @@ public class Brudmadhr implements PlayerModule {
     
     public void make(PlayerMove move){
     	if(move.isMove()){
-    		playersCoord.put(move.getPlayerId(),new Coordinate(move.getEndRow(), move.getEndCol());
+    		playersCoord.put(move.getPlayerId(),new Coordinate(move.getEndRow(), move.getEndCol()));
     	}else{
     		quoridorBoard.setWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
     	}
@@ -371,7 +414,7 @@ public class Brudmadhr implements PlayerModule {
     
     public void unmake(PlayerMove move){
     	if(move.isMove()){
-    		playersCoord.put(move.getPlayerId(),new Coordinate(move.getStartRow(), move.getStartCol());
+    		playersCoord.put(move.getPlayerId(),new Coordinate(move.getStartRow(), move.getStartCol()));
     	}else{
     		quoridorBoard.removeWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
     	}
@@ -380,7 +423,7 @@ public class Brudmadhr implements PlayerModule {
     PlayerMove move_minimax() {
         List<Object> result = minimax(2, myId, Integer.MIN_VALUE, Integer.MAX_VALUE);
            // depth, max-turn, alpha, beta
-        return result.get(1);  // returns best move
+        return (PlayerMove)result.get(1);  // returns best move
      }
    
      /** Minimax (recursive) at level of depth for maximizing or minimizing player
@@ -390,30 +433,30 @@ public class Brudmadhr implements PlayerModule {
         Set<PlayerMove> nextMoves = allPossibleMoves();
    
         // myId is maximizing; while opponentId is minimizing
-        int score;
-        playerMove move_player;
-  	  List<Object> answer = new ArrayList<Object>();
+        int score = -1;
+        PlayerMove move_player = null;
+  	    List<Object> answer = new ArrayList<Object>();
    
         if (nextMoves.isEmpty() || depth == 0) {
            // Gameover or depth reached, evaluate score
            score = evaluate();
-  		 answer.add(1, new PlayerMove(playerId, false, -1, -1));
-  		 answer.add(0, score);
+  		   answer.add(1, new PlayerMove(playerId, false, new Coordinate(-1,-1), new Coordinate(-1,-1))); // fin du jeu
+  		   answer.add(0, score);
            return answer;
         } else {
            for (PlayerMove move : nextMoves) {
               // try this move for the current "player"
         	   
-              make(move); // fonction a implementer
+              //make(move); // fonction a implementer
               
               if (playerId == myId) {
-                 score = minimax(depth - 1, opponentId, alpha, beta).get(0);
+                 score =(int) minimax(depth - 1, opponentId, alpha, beta).get(0);
                  if (score > alpha) {
                     alpha = score;
                     move_player = move;
                  }
               } else { 
-                 score = minimax(depth - 1, myId, alpha, beta).get(0);
+                 score =(int) minimax(depth - 1, myId, alpha, beta).get(0);
                  if (score < beta) {
                     beta = score;
                     move_player = move;
@@ -421,7 +464,7 @@ public class Brudmadhr implements PlayerModule {
               }
               
               // undo move
-              unmake(move); // fonction a implementer
+              //unmake(move); // fonction a implementer
               
               // cut-off
               if (alpha >= beta) break;
