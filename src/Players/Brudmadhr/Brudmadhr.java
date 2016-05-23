@@ -23,7 +23,6 @@ public class Brudmadhr implements PlayerModule {
     private Map<Integer, Coordinate> playersCoord;
     private Map<Integer, Integer> playersNbWalls;
     private Board quoridorBoard;
-    private int nbPlayers;
 
     @Override
     public void init(Logger logger, int i, int i1, Map<Integer, Coordinate> map) {
@@ -43,7 +42,6 @@ public class Brudmadhr implements PlayerModule {
 
         }
 
-        nbPlayers = playersCoord.keySet().size();
         quoridorBoard = new Board(this);
     }
 
@@ -262,11 +260,11 @@ public class Brudmadhr implements PlayerModule {
         for (int i = 1; i < quoridorBoard.BOARD_SIZE; i++) {
             for (int j = 1; j < quoridorBoard.BOARD_SIZE; j++) {
                 // verification mur valide horizontal
-                if (quoridorBoard.poseMurHorizontal(i, j) && (!wallIsBlockingPath(1, 0, true) && !wallIsBlockingPath(2, 9, true))) {
+                if (quoridorBoard.poseMurHorizontal(i, j)) {
                     sRet.add(new PlayerMove(myId, false, new Coordinate(i, j - 1), new Coordinate(i, j + 1)));
                 }
                 //vertical
-                if (quoridorBoard.poseMurVertical(i, j) && (!wallIsBlockingPath(1, 0, true) && !wallIsBlockingPath(2, 9, true))) {
+                if (quoridorBoard.poseMurVertical(i, j)) {
                     sRet.add(new PlayerMove(myId, false, new Coordinate(i - 1, j), new Coordinate(i + 1, j)));
                 }
 
@@ -275,24 +273,22 @@ public class Brudmadhr implements PlayerModule {
 
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose
          */
-      /*  for (PlayerMove playermove : sRet) {
+        Set<PlayerMove> sInterdit = new HashSet<>();
+        for (PlayerMove playermove : sRet) {
             boolean wallOk = true;
-
-            if(nbPlayers == 2){
-                if(wallIsBlockingPath(1, 0, true) || wallIsBlockingPath(2, 9, true)) {
+        /* objectif différent pour chaque joueur
+        * joueur 1 commence en bas // joueur 2  en haut // joueur 3 à gauche // joueur 4 à droite
+        */
+            if(getPlayerLocations().keySet().size() == 2){
+                if(wallIsBlockingPath(1, 0, true) || wallIsBlockingPath(2, 8, true)) {
                     wallOk = false;
+                    sInterdit.add(playermove);
                 }
             }
-            else {
-                if (wallIsBlockingPath(3, 9, false) || wallIsBlockingPath(4, 0, false)){
-                    wallOk = false;
-                }
-            }
-            // si mur invalide on l'enlève de la liste à retourner
-            if (!wallOk) {
-                sRet.remove(playermove);
-            }
-        }*/
+        }
+        for(PlayerMove forbidden : sInterdit){
+            sRet.remove(forbidden);
+        }
         return sRet;
     }
 
@@ -302,27 +298,17 @@ public class Brudmadhr implements PlayerModule {
      */
     private boolean wallIsBlockingPath(int playerId, int pos, boolean b) {
         boolean bRet = true;
-        if (b) { // gestion joueur 1/2
-            for (int c = 0; c < quoridorBoard.BOARD_SIZE; c++) {
-                if (getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size() == 0) { // Impossbilité de trouver un chemin jsuqu'à la case (0,c) ou (9,c)
-                    bRet = true;
-                }else {
-                    bRet = false;
-                    return bRet;
-                } // On a trouvé un chemin possible
-            }
-        } else { // gestion joueur 3/4
-            for (int c = 0; c < quoridorBoard.BOARD_SIZE; c++) {
-                if (getShortestPath(getPlayerLocation(playerId), new Coordinate(c, pos)).size() == 0) { // Impossibilité de trouver un chemin jusqu'à la case (c,0) ou (c,9)
-                    bRet = true;
-                }else{
-                    bRet = false;
-                    return bRet; // On a trouvé un chemin possible
-                }
-            }
+        // gestion joueur 1/2
+        for (int c = 0; c < quoridorBoard.BOARD_SIZE; c++) {
+            if (getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size() == 0) { // Impossbilité de trouver un chemin jsuqu'à la case (0,c) ou (9,c)
+                bRet = true;
+            } else {
+                bRet = false;
+                return bRet;
+            } // On a trouvé un chemin possible
         }
-            return bRet;
-     }
+        return bRet;
+    }
 
     @Override
     public PlayerMove move() {
