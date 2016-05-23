@@ -48,7 +48,7 @@ public class Brudmadhr implements PlayerModule {
 
     @Override
     public void lastMove(PlayerMove playerMove) {
-        System.out.println("in lastMove ..." + playerMove);
+        System.out.println("in lastMove ..." + playerMove + "\n");
         int playerId = playerMove.getPlayerId(); // récupère l'id du joueur qui vient de jouer
         if (playerMove.isMove()) // renvoi true si le joueur a bougé
             playersCoord.put(playerId, playerMove.getEnd()); // maj des coord
@@ -59,7 +59,8 @@ public class Brudmadhr implements PlayerModule {
             quoridorBoard.setWall(playerMove.getStart().getRow(), playerMove.getStart().getCol(),
                     playerMove.getEnd().getRow(), playerMove.getEnd().getCol());
         }
-        System.out.print(playerMove);
+        //quoridorBoard.getListeMurHorizontal(); Les listes sont correctes
+        //quoridorBoard.getListeMurVertical();
     }
 
 
@@ -244,17 +245,17 @@ public class Brudmadhr implements PlayerModule {
         return sRet;
     }
 
-    private Set<PlayerMove> getAllWallsMoves() {
+    public Set<PlayerMove> getAllWallsMoves() {
         /* une pose de mur est valide ssi :
          *  1) le joueur a encore au moins un mur
          *  2) si les murs ne se croisent pas
          *  3) la pose de ce mur n'empeche pas tous les joueurs à avoir au moins un chemin possible pour gagner
          */
-
         /* Condition 1 : il reste un mur au moins au joueur à placer */
         Set<PlayerMove> sRet = new HashSet<>();
         if (getWallsRemaining(myId) == 0){return sRet;}
 
+<<<<<<< HEAD
         /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
         for(int i=0;i<quoridorBoard.BOARD_SIZE;i++){
             for(int j=0;j<quoridorBoard.BOARD_SIZE;j++){
@@ -265,9 +266,22 @@ public class Brudmadhr implements PlayerModule {
                 //vertical
                 if(j!=0 && j!=quoridorBoard.BOARD_SIZE && !quoridorBoard.wallCollisionEdges(i,j,i+2,j) && !quoridorBoard.wallCollisionWall(i,j,i+2,j)){
                     sRet.add(new PlayerMove(myId,false,new Coordinate(i,j),new Coordinate(i+2,j)));
+=======
+
+        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
+        for(int i=1;i<9;i++) {
+            for (int j = 1; j < 9; j++) {
+                // verification mur valide horizontal
+                if ( quoridorBoard.poseMurHorizontal(i, j) ) {
+                    sRet.add(new PlayerMove(myId, false, new Coordinate(i, j-1), new Coordinate(i, j + 1)));
+                }
+                if ( quoridorBoard.poseMurVertical(i, j) ) {
+                    sRet.add(new PlayerMove(myId, false, new Coordinate(i-1, j), new Coordinate(i + 1, j) ) ) ;
+>>>>>>> b1e9016b2f40bcb833dabf49c7aaac6a8fdd1f1e
                 }
             }
         }
+
 
 
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose
@@ -419,7 +433,7 @@ public class Brudmadhr implements PlayerModule {
     		quoridorBoard.removeWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
     	}
     }
-    
+    /*
     PlayerMove move_minimax() {
         List<Object> result = minimax(2, myId, Integer.MIN_VALUE, Integer.MAX_VALUE);
            // depth, max-turn, alpha, beta
@@ -428,21 +442,36 @@ public class Brudmadhr implements PlayerModule {
    
      /** Minimax (recursive) at level of depth for maximizing or minimizing player
          with alpha-beta cut-off. Return int[3] of {score, row, col}  */
-     private List<Object> minimax(int depth, int playerId, int alpha, int beta) {
+
+
+    /*
+    private List<Object> minimax(int depth, int playerId, int alpha, int beta) {
         // Generate possible next moves in a list of int[2] of {row, col}.
         Set<PlayerMove> nextMoves = allPossibleMoves();
    
         // myId is maximizing; while opponentId is minimizing
+<<<<<<< HEAD
         int score = -1;
         PlayerMove move_player = null;
   	    List<Object> answer = new ArrayList<Object>();
+=======
+        int score;
+        PlayerMove move_player;
+  	  List<Object> answer = new ArrayList<Object>();
+>>>>>>> b1e9016b2f40bcb833dabf49c7aaac6a8fdd1f1e
    
         if (nextMoves.isEmpty() || depth == 0) {
            // Gameover or depth reached, evaluate score
            score = evaluate();
+<<<<<<< HEAD
   		   answer.add(1, new PlayerMove(playerId, false, new Coordinate(-1,-1), new Coordinate(-1,-1))); // fin du jeu
   		   answer.add(0, score);
            return answer;
+=======
+  		 answer.add(1, new PlayerMove(playerId, false, -1, -1));
+  		 answer.add(0, score);
+           return answer;œ
+>>>>>>> b1e9016b2f40bcb833dabf49c7aaac6a8fdd1f1e
         } else {
            for (PlayerMove move : nextMoves) {
               // try this move for the current "player"
@@ -473,5 +502,5 @@ public class Brudmadhr implements PlayerModule {
   		 answer.add(0, score);
   		 return answer;
         }
-     }
+     }*/
 }
