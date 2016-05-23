@@ -66,13 +66,9 @@ public class Board {
     }
 
 
-
-
-
-    
-    public void removeWall(int idep, int jdep, int iarr, int jarr){
+   /* public void removeWall(int idep, int jdep, int iarr, int jarr){
     	intersections[(idep+iarr)/2][(jdep+jarr)/2] = false;
-    }
+    }*/
 
 
     // Vérifie qu'il n'y a pas d'intersection avec les bords
@@ -98,7 +94,6 @@ public class Board {
         }
     }
 
-
     public void getListeMurHorizontal(){
         for (int i = 0; i<BOARD_SIZE;i++){
             for (int j=0;j<BOARD_SIZE;j++){
@@ -112,39 +107,5 @@ public class Board {
                 System.out.println(i +""+ j +"" + ListeMurVertical[i][j]);
             }
         }
-    }
-    
-<<<<<<< HEAD
-    public boolean wallCollisionWall(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un autre mur
-    	boolean answer =  intersections[(idep+iarr)/2][(jdep+jarr)/2]; //|| // cas croisé
-               // intersections[idep][jdep]                    ||
-               // intersections[iarr][jarr]; // cas deux murs même lig ou meme col
-    	/*if(idep == iarr){ // meme ligne
-        	answer = answer || ((board[idep][jdep] & 0b1000) == 0b1000) || // controle d'une eventuelle superposition avec autre mur
-        	((board[idep][jdep+1] & 0b1000) == 0b1000);
-    	}else if(jdep == jarr){
-    		answer = answer || ((board[idep][jdep] & 0b0001) == 0b0001) ||
-            ((board[idep+1][jdep] & 0b0001) == 0b0001);
-    	}*/
-    	return answer;
-	}
-=======
->>>>>>> b1e9016b2f40bcb833dabf49c7aaac6a8fdd1f1e
-
-    public String toString(){
-        String sRet = "";
-        for(int i=0;i<BOARD_SIZE;i++){
-            for(int j=0;j<BOARD_SIZE;j++){
-                for(Integer player : ia.getPlayerLocations().keySet()){
-                    Coordinate posPlayer = ia.getPlayerLocation(player);
-                    if(posPlayer.getRow() == i && posPlayer.getCol() == j){
-                        System.out.print(player);
-                    }
-                    else{ System.out.print(". "); }
-                }
-            }
-            System.out.println();
-        }
-        return sRet;
     }
 }

@@ -23,12 +23,13 @@ public class Brudmadhr implements PlayerModule {
     private Map<Integer, Coordinate> playersCoord;
     private Map<Integer, Integer> playersNbWalls;
     private Board quoridorBoard;
+    private int nbPlayers;
 
     @Override
     public void init(Logger logger, int i, int i1, Map<Integer, Coordinate> map) {
         this.logger = logger;
         this.myId = i;
-        this.opponentId = (myId==1) ? 2 : 1;
+        this.opponentId = (myId == 1) ? 2 : 1;
         this.myNbWalls = i1;
 
         playersCoord = new HashMap<>();
@@ -42,6 +43,7 @@ public class Brudmadhr implements PlayerModule {
 
         }
 
+        nbPlayers = playersCoord.keySet().size();
         quoridorBoard = new Board(this);
     }
 
@@ -83,7 +85,7 @@ public class Brudmadhr implements PlayerModule {
         }
         return setCoordRet;
     }
-    
+
     /**
      * coordinate : position actuelle
      * coordinate1 : position a atteindre
@@ -169,7 +171,7 @@ public class Brudmadhr implements PlayerModule {
     public Set<PlayerMove> allPossibleMoves() {
         Set<PlayerMove> sRet = new HashSet<>();
         sRet.addAll(getAllPieceMoves());
-       // sRet.addAll(getAllWallsMoves());
+        sRet.addAll(getAllWallsMoves());
         return sRet;
     }
 
@@ -190,31 +192,29 @@ public class Brudmadhr implements PlayerModule {
                      *  - s'il n'y a pas de mur derrière lui
                      *  les méthodes de la classes board vérifient cela !
                      */
-                	if(myLig==i){
+                    if (myLig == i) {
                         //EST
-                		if (quoridorBoard.deplacementE(i, j)) finalPosition = new Coordinate(i, j + 1);
+                        if (quoridorBoard.deplacementE(i, j)) finalPosition = new Coordinate(i, j + 1);
                             //DIAGONALE E
-                            else if(quoridorBoard.deplacementE(myLig-1,myCol)){
-                                finalPosition = new Coordinate(i-1,j+1);
-                                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        }
-                            else if(quoridorBoard.deplacementE(myLig,myCol+1)){
-                                finalPosition = new Coordinate(i+1,j+1);
-                                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        else if (quoridorBoard.deplacementE(myLig - 1, myCol)) {
+                            finalPosition = new Coordinate(i - 1, j + 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        } else if (quoridorBoard.deplacementE(myLig, myCol + 1)) {
+                            finalPosition = new Coordinate(i + 1, j + 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
                         //OUEST
-                		if (quoridorBoard.deplacementO(i, j)) finalPosition = new Coordinate(i, j - 1);
+                        if (quoridorBoard.deplacementO(i, j)) finalPosition = new Coordinate(i, j - 1);
                             //DIAGONALE O
-                            else if(quoridorBoard.deplacementO(myLig-1,myCol)){
-                                finalPosition = new Coordinate(i-1,j-1);
-                                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        }
-                            else if(quoridorBoard.deplacementO(myLig+1,myCol)){
-                                finalPosition = new Coordinate(i+1,j-1);
-                                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        else if (quoridorBoard.deplacementO(myLig - 1, myCol)) {
+                            finalPosition = new Coordinate(i - 1, j - 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        } else if (quoridorBoard.deplacementO(myLig + 1, myCol)) {
+                            finalPosition = new Coordinate(i + 1, j - 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
 
-                	}else if(myCol==j) {
+                    } else if (myCol == j) {
                         //NORD
                         if (quoridorBoard.deplacementN(i, j)) {
                             finalPosition = new Coordinate(i - 1, j);
@@ -240,7 +240,8 @@ public class Brudmadhr implements PlayerModule {
                     }
                 }
             }
-            if(!getPlayerLocation(myId).equals(finalPosition)) sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition)); // on ajoute le coup possible à la liste
+            if (!getPlayerLocation(myId).equals(finalPosition))
+                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition)); // on ajoute le coup possible à la liste
         }
         return sRet;
     }
@@ -253,77 +254,45 @@ public class Brudmadhr implements PlayerModule {
          */
         /* Condition 1 : il reste un mur au moins au joueur à placer */
         Set<PlayerMove> sRet = new HashSet<>();
-        if (getWallsRemaining(myId) == 0){return sRet;}
-
-<<<<<<< HEAD
-        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
-        for(int i=0;i<quoridorBoard.BOARD_SIZE;i++){
-            for(int j=0;j<quoridorBoard.BOARD_SIZE;j++){
-                // verification mur valide horizontal
-                if(i!=0 && i!=quoridorBoard.BOARD_SIZE && !quoridorBoard.wallCollisionEdges(i,j,i,j+2) && !quoridorBoard.wallCollisionWall(i,j,i,j+2)){
-                    sRet.add(new PlayerMove(myId,false,new Coordinate(i,j),new Coordinate(i,j+2)));
-                }
-                //vertical
-                if(j!=0 && j!=quoridorBoard.BOARD_SIZE && !quoridorBoard.wallCollisionEdges(i,j,i+2,j) && !quoridorBoard.wallCollisionWall(i,j,i+2,j)){
-                    sRet.add(new PlayerMove(myId,false,new Coordinate(i,j),new Coordinate(i+2,j)));
-=======
-
-        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
-        for(int i=1;i<9;i++) {
-            for (int j = 1; j < 9; j++) {
-                // verification mur valide horizontal
-                if ( quoridorBoard.poseMurHorizontal(i, j) ) {
-                    sRet.add(new PlayerMove(myId, false, new Coordinate(i, j-1), new Coordinate(i, j + 1)));
-                }
-                if ( quoridorBoard.poseMurVertical(i, j) ) {
-                    sRet.add(new PlayerMove(myId, false, new Coordinate(i-1, j), new Coordinate(i + 1, j) ) ) ;
->>>>>>> b1e9016b2f40bcb833dabf49c7aaac6a8fdd1f1e
-                }
-            }
+        if (getWallsRemaining(myId) == 0) {
+            return sRet;
         }
 
+        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
+        for (int i = 1; i < quoridorBoard.BOARD_SIZE; i++) {
+            for (int j = 1; j < quoridorBoard.BOARD_SIZE; j++) {
+                // verification mur valide horizontal
+                if (quoridorBoard.poseMurHorizontal(i, j) && (!wallIsBlockingPath(1, 0, true) && !wallIsBlockingPath(2, 9, true))) {
+                    sRet.add(new PlayerMove(myId, false, new Coordinate(i, j - 1), new Coordinate(i, j + 1)));
+                }
+                //vertical
+                if (quoridorBoard.poseMurVertical(i, j) && (!wallIsBlockingPath(1, 0, true) && !wallIsBlockingPath(2, 9, true))) {
+                    sRet.add(new PlayerMove(myId, false, new Coordinate(i - 1, j), new Coordinate(i + 1, j)));
+                }
 
+            }
+        }
 
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose
          */
-        for (PlayerMove playermove : sRet) {
+      /*  for (PlayerMove playermove : sRet) {
             boolean wallOk = true;
-            for (Integer player : playersCoord.keySet()) {
-                /* objectif différent pour chaque joueur
-                * joueur 1 commence en bas // joueur 2  en haut // joueur 3 à gauche // joueur 4 à droite
-                */
-                switch (getID()) {
-                    case 1: {
-                        if (wallIsBlockingPath(player, 0, true)) {
-                            wallOk = false;
-                        }
-                        break;
-                    }
-                    case 2: {
-                        if (wallIsBlockingPath(player, 9, true)) {
-                            wallOk = false;
-                        }
-                        break;
-                    }
-                    case 3: {
-                        if (wallIsBlockingPath(player, 9, false)) {
-                            wallOk = false;
-                        }
-                        break;
-                    }
-                    case 4:
-                        if (wallIsBlockingPath(player, 0, false)) {
-                            wallOk = false;
-                        }
-                        break;
-                    default:
-                        wallOk = false;
-                        break;
+
+            if(nbPlayers == 2){
+                if(wallIsBlockingPath(1, 0, true) || wallIsBlockingPath(2, 9, true)) {
+                    wallOk = false;
+                }
+            }
+            else {
+                if (wallIsBlockingPath(3, 9, false) || wallIsBlockingPath(4, 0, false)){
+                    wallOk = false;
                 }
             }
             // si mur invalide on l'enlève de la liste à retourner
-            if(!wallOk){ sRet.remove(playermove); }
-        }
+            if (!wallOk) {
+                sRet.remove(playermove);
+            }
+        }*/
         return sRet;
     }
 
@@ -339,7 +308,7 @@ public class Brudmadhr implements PlayerModule {
                     bRet = true;
                 }else {
                     bRet = false;
-                    break;
+                    return bRet;
                 } // On a trouvé un chemin possible
             }
         } else { // gestion joueur 3/4
@@ -348,7 +317,7 @@ public class Brudmadhr implements PlayerModule {
                     bRet = true;
                 }else{
                     bRet = false;
-                    break; // On a trouvé un chemin possible
+                    return bRet; // On a trouvé un chemin possible
                 }
             }
         }
@@ -430,7 +399,7 @@ public class Brudmadhr implements PlayerModule {
     	if(move.isMove()){
     		playersCoord.put(move.getPlayerId(),new Coordinate(move.getStartRow(), move.getStartCol()));
     	}else{
-    		quoridorBoard.removeWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
+    		//quoridorBoard.removeWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
     	}
     }
     /*
