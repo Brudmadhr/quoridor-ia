@@ -24,6 +24,9 @@ public class Brudmadhr implements PlayerModule {
     private Map<Integer, Integer> playersNbWalls;
     private Board quoridorBoard;
 
+    public void Brudmadhr(){
+
+    }
     @Override
     public void init(Logger logger, int i, int i1, Map<Integer, Coordinate> map) {
         this.logger = logger;
@@ -244,24 +247,17 @@ public class Brudmadhr implements PlayerModule {
         return sRet;
     }
 
-    public Set<PlayerMove> getAllWallsMoves() {
-        /* une pose de mur est valide ssi :
-         *  1) le joueur a encore au moins un mur
-         *  2) si les murs ne se croisent pas
-         *  3) la pose de ce mur n'empeche pas tous les joueurs à avoir au moins un chemin possible pour gagner
-         */
-        /* Condition 1 : il reste un mur au moins au joueur à placer */
+    //Obtention de tout les murs possibles sans s'occuper s'il bloque le passage ou non
+    public Set<PlayerMove> getAllWallsMovesInit(){
         Set<PlayerMove> sRet = new HashSet<>();
-        if (getWallsRemaining(myId) == 0) {
-            return sRet;
-        }
-
-        /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
         for (int i = 1; i < quoridorBoard.BOARD_SIZE; i++) {
             for (int j = 1; j < quoridorBoard.BOARD_SIZE; j++) {
                 // verification mur valide horizontal
                 if (quoridorBoard.poseMurHorizontal(i, j)) {
                     sRet.add(new PlayerMove(myId, false, new Coordinate(i, j - 1), new Coordinate(i, j + 1)));
+
+
+
                 }
                 //vertical
                 if (quoridorBoard.poseMurVertical(i, j)) {
@@ -270,25 +266,63 @@ public class Brudmadhr implements PlayerModule {
 
             }
         }
+        return sRet;
+
+    }
+
+    public Set<PlayerMove> getAllWallsMoves() {
+        /* une pose de mur est valide ssi :
+         *  1) le joueur a encore au moins un mur
+         *  2) si les murs ne se croisent pas
+         *  3) la pose de ce mur n'empeche pas tous les joueurs à avoir au moins un chemin possible pour gagner
+         */
+        /* Condition 1 : il reste un mur au moins au joueur à placer */
+
+        Set<PlayerMove> sInterdit = new HashSet<>();
+        Set<PlayerMove> sRet = getAllWallsMovesInit();
+
+        if (getWallsRemaining(myId) == 0) {
+            return new HashSet<PlayerMove>();
+        }
+  /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
+
 
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose
          */
-        Set<PlayerMove> sInterdit = new HashSet<>();
-        for (PlayerMove playermove : sRet) {
-            boolean wallOk = true;
-        /* objectif différent pour chaque joueur
-        * joueur 1 commence en bas // joueur 2  en haut // joueur 3 à gauche // joueur 4 à droite
-        */
-            if(getPlayerLocations().keySet().size() == 2){
-                if(wallIsBlockingPath(1, 0, true) || wallIsBlockingPath(2, 8, true)) {
-                    wallOk = false;
+
+        if (getPlayerLocations().keySet().size() == 2) {
+            for (PlayerMove playermove : sRet) {
+                /*
+                Board quoridorBoardBis = new Board();
+                quoridorBoardBis = quoridorBoard.clonage();
+                */
+                boolean wallIsOk = false;
+                //System.out.println("\n"+ quoridorBoardBis + quoridorBoard + "\n");
+                quoridorBoard.setWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
+
+                for (int i =0; i<quoridorBoard.BOARD_SIZE; i++) {
+
+                    if (getShortestPath(getPlayerLocation(myId),new Coordinate(0,i)).size()!=0  ){
+                        wallIsOk = true;
+                    }
+                    if (getShortestPath((getPlayerLocation(2)), new Coordinate(8, i)).size() != 0) {
+                        wallIsOk = true;
+                    }
+                }
+                if(!wallIsOk){
                     sInterdit.add(playermove);
                 }
+
+                quoridorBoard.removeWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
+
             }
         }
+
+
         for(PlayerMove forbidden : sInterdit){
             sRet.remove(forbidden);
         }
+
         return sRet;
     }
 
@@ -300,7 +334,8 @@ public class Brudmadhr implements PlayerModule {
         boolean bRet = true;
         // gestion joueur 1/2
         for (int c = 0; c < quoridorBoard.BOARD_SIZE; c++) {
-            if (getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size() == 0) { // Impossbilité de trouver un chemin jsuqu'à la case (0,c) ou (9,c)
+            System.out.println("\n" + getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size());
+            if ((getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size()) == 0) {// Impossbilité de trouver un chemin jsuqu'à la case (0,c) ou (9,c)
                 bRet = true;
             } else {
                 bRet = false;
@@ -313,10 +348,11 @@ public class Brudmadhr implements PlayerModule {
     @Override
     public PlayerMove move() {
         // implémentation random pour l'instant
-       // List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
-        //Collections.shuffle(moves);
+        List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
+        Collections.shuffle(moves);
+        return moves.get(0);
         //quoridorBoard.toString();
-        return new PlayerMove(myId,true,getPlayerLocation(myId),new Coordinate(getPlayerLocation(myId).getRow()-1,getPlayerLocation(myId).getCol()));
+        //return new PlayerMove(myId,true,getPlayerLocation(myId),new Coordinate(getPlayerLocation(myId).getRow()-1,getPlayerLocation(myId).getCol()));
     }
 
     @Override

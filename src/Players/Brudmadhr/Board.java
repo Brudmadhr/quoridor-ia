@@ -11,6 +11,10 @@ public class Board {
     private boolean[][] ListeMurVertical;
     private Brudmadhr ia;
     // Un tableau 9*9 , un byte pour modéliser les murs entre chaque case (1 bit pour chaque direction)
+    public Board(){
+
+    }
+
     public Board(Brudmadhr b){
         ia = b;
         board = new byte[BOARD_SIZE][BOARD_SIZE];
@@ -31,7 +35,7 @@ public class Board {
     public boolean deplacementS(int i, int j){  return (i+1<BOARD_SIZE && ( (board[i][j] & 2) == 0) );}
     public boolean deplacementO(int i, int j){  return (j-1>=0         && ( (board[i][j] & 1) == 0) );}
 
-    public byte[][] getBoard(){return board;}
+
     
     /**
      *  idep, jdep : coords depart ; iarr, jarr : coords arrivee
@@ -56,7 +60,7 @@ public class Board {
                     board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b0100);
                     ListeMurVertical[i][j]=true;// ajout de l'intersection (milieu du mur) dans liste des murs verticaux
                 }else{
-                    System.err.println("Impossible de placer un mur a cet endroit!");
+                   // System.err.println("Impossible de placer un mur a cet endroit! lors du set" + "\n");
                     return false;
                 }
             }
@@ -64,7 +68,31 @@ public class Board {
 
         return true;
     }
+    public boolean removeWall(int idep, int jdep, int iarr, int jarr){
+        int i = (idep+iarr)/2;
+        int j =(jdep+jarr)/2;
+        if(!wallCollisionEdges(idep, jdep, iarr, jarr) ){ // si pas de collision avec un bord
+            if(idep == iarr && !poseMurHorizontal(i, j) ) { // ajout d'un mur horizontal
+                board[idep][jdep]    = 0b00000000;
+                board[idep][jdep+1]  = 0b00000000;
+                board[idep-1][jdep]  = 0b00000000;
+                board[iarr-1][jarr-1]= 0b00000000;
+                ListeMurHorizontal[i][j]=false ;// ajout de l'intersection (milieu du mur) dans liste des murs horizontaux
+            }else{
+                if(jdep == jarr && !poseMurVertical(i,j) ){ // meme colonne, ajout d'un mur vertical
+                    board[idep][jdep]    = 0b00000000;
+                    board[idep+1][jdep]  = 0b00000000;
+                    board[idep][jdep-1]  = 0b00000000;
+                    board[iarr-1][jarr-1]= 0b00000000;
+                    ListeMurVertical[i][j]=false;// ajout de l'intersection (milieu du mur) dans liste des murs verticaux
+                }else{
+                   // System.out.println("Impossible d'enlever un mur à cet endroit" + "\n");
+                }
+            }
+        }else{ return false; }
 
+        return true;
+    }
 
    /* public void removeWall(int idep, int jdep, int iarr, int jarr){
     	intersections[(idep+iarr)/2][(jdep+jarr)/2] = false;
@@ -93,7 +121,7 @@ public class Board {
             return true;
         }
     }
-
+/*
     public void getListeMurHorizontal(){
         for (int i = 0; i<BOARD_SIZE;i++){
             for (int j=0;j<BOARD_SIZE;j++){
@@ -101,6 +129,10 @@ public class Board {
             }
         }
     }
+
+
+
+
     public void getListeMurVertical(){
         for (int i = 0; i<BOARD_SIZE;i++){
             for (int j=0;j<BOARD_SIZE;j++){
@@ -108,4 +140,70 @@ public class Board {
             }
         }
     }
+    */
+
+
+
+    public Brudmadhr getIa(){
+        return this.ia;
+    }
+
+    public void setIa(Brudmadhr bonjour){
+        this.ia=bonjour;
+    }
+
+    public byte[][] getBoard(){return board;}
+
+    public void setBoard(byte[][] toto,int i,int j) {
+        board[i][j]= (byte) (board[i][j] | toto[i][j]);
+
+    }
+
+    public boolean[][] getListeMurHorizontal(){
+        return this.ListeMurHorizontal;
+    }
+
+    public void setListeMurHorizontal(boolean[][] toto,int i, int j) {
+        this.ListeMurHorizontal[i][j]=toto[i][j];
+    }
+
+    public boolean[][] getListeMurVertical()
+    {
+        return this.ListeMurVertical;
+    }
+
+    public void setListeMurVertical(boolean[][] toto, int i , int j)
+    {
+        this.ListeMurVertical[i][j]=toto[i][j];
+    }
+/*
+    public Board clonage(){
+        Board clone= new Board();
+        clone.setIa(this.getIa());
+        for (int i=0; i<BOARD_SIZE;i++){
+            for (int j=0; j<BOARD_SIZE;j++){
+                clone.setBoard(this.getBoard(), i, j);
+            }
+        }
+        for (int i=0; i<BOARD_SIZE;i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                clone.setListeMurHorizontal(this.getListeMurHorizontal(), i, j);
+                clone.setListeMurVertical(this.getListeMurVertical(), i, j);
+            }
+        }
+        return clone;
+    }*/
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
