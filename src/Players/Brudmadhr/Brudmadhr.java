@@ -378,25 +378,25 @@ public class Brudmadhr implements PlayerModule {
                 path_you = getShortestPath(getPlayerLocation(1),goal_you).size();
                 //path_you= Math.abs(playersCoord.get(1).getRow()-0) + Math.abs(playersCoord.get(1).getCol()-i);
                 score_you = ( path_you < score_you) ? path_you : score_you;
-                score_you+=playersNbWalls.get(1);
+                //score_you+=playersNbWalls.get(1);
 
                 goal_adv = new Coordinate(8,i);
                 path_adv = getShortestPath(getPlayerLocation(2),goal_adv).size();
                 //path_adv= Math.abs(playersCoord.get(2).getRow()-8) + Math.abs(playersCoord.get(2).getCol()-i);
                 score_adv = ( path_adv < score_adv) ? path_adv : score_adv;
-                score_adv+=playersNbWalls.get(2);
+                //score_adv+=playersNbWalls.get(2);
             }
         }else{ // player est le joueur 2
             for(int i =0; i<9; i++){
                 goal_you = new Coordinate(8,i);
                 path_you = getShortestPath(getPlayerLocation(2),goal_you).size();
                 score_you = ( path_you < score_you) ? path_you : score_you;
-                score_you+=playersNbWalls.get(2);
+                //score_you+=playersNbWalls.get(2);
 
                 goal_adv = new Coordinate(0,i);
                 path_adv = getShortestPath(getPlayerLocation(1),goal_adv).size();
                 score_adv = ( path_adv < score_adv) ? path_adv : score_adv;
-                score_adv+=playersNbWalls.get(1);
+                //score_adv+=playersNbWalls.get(1);
             }
         }
         return score_adv-score_you;
@@ -420,7 +420,7 @@ public class Brudmadhr implements PlayerModule {
     }
 
     PlayerMove move_minimax() {
-        PlayerMove result = minimax(2, myId, Integer.MIN_VALUE, Integer.MAX_VALUE).getMove();
+        PlayerMove result = minimax(1, myId, Integer.MIN_VALUE, Integer.MAX_VALUE).getMove();
         // depth, max-turn, alpha, beta
         return result;  // returns best move
     }
@@ -432,7 +432,7 @@ public class Brudmadhr implements PlayerModule {
 
     private Coup minimax( int depth, int playerId, int alpha, int beta) {
         // Generate possible next moves in a list of int[2] of {row, col}.
-        Set<PlayerMove> nextMoves = getAllPieceMoves();
+        Set<PlayerMove> nextMoves = allPossibleMoves();
 
         //System.out.println("Nb de coups possibles : "+nextMoves.size());
 
@@ -450,7 +450,7 @@ public class Brudmadhr implements PlayerModule {
                      /*answer.add(1, new PlayerMove(playerId, false, new Coordinate(-1,-1), new Coordinate(-1,-1))); // fin du jeu
                      answer.add(0, score);*/
             answer.setScore(score);
-            answer.setMove(new PlayerMove(playerId, false, new Coordinate(-1,-1), new Coordinate(-1,-1)));
+            answer.setMove(move_player);
             return answer;
         } else {
             for (PlayerMove move : nextMoves) {
