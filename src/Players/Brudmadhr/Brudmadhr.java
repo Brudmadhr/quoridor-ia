@@ -151,6 +151,56 @@ public class Brudmadhr implements PlayerModule {
         return lCoordRet;
     }
 
+
+    public Coordinate getShortestPathBis(Coordinate dep, int pl) {
+        Queue<Coordinate> q = new LinkedList<Coordinate>();
+        LinkedList<Coordinate> visited = new LinkedList<Coordinate>();
+        Coordinate current = dep;
+
+        boolean finished = false;
+
+        q.add(current);
+        visited.add(current);
+
+        while (!q.isEmpty() && !finished) {
+            current = q.remove();
+
+            for (Coordinate c : getNeighbors(current)) {
+                if (!visited.contains(c)) {
+                    c = current;
+                    visited.add(c);
+                    q.add(c);
+                    if (finished(c, pl)) {
+                        current = c;
+                        finished = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return current;
+    }
+
+    /**
+     * Check if a position p is at the winning end of the board from player pl's
+     * perspective.
+     *
+     * @param p position to check
+     * @param pl player
+     * @return if position is at the correct end of the board
+     */
+    public boolean finished(Coordinate p, Integer pl) {
+        if (pl == 1 && p.getRow() == 0) {
+            return true;
+        } else if (pl == 2 && p.getRow() == 8) {
+            return true;
+        } else if (pl == 3 && p.getCol() == 0) {
+            return true;
+        } else if (pl == 4 && p.getCol() == 8) { return true; }
+        return false;
+    }
+
     @Override
     public int getWallsRemaining(int i) {
         return playersNbWalls.get(i);
@@ -181,8 +231,8 @@ public class Brudmadhr implements PlayerModule {
     @Override
     public Set<PlayerMove> allPossibleMoves() {
         Set<PlayerMove> sRet = new HashSet<>();
+        sRet.addAll(getAllWallsMoves());
         sRet.addAll(getAllPieceMoves());
-       // sRet.addAll(getAllWallsMoves());
         return sRet;
     }
 
@@ -321,21 +371,17 @@ public class Brudmadhr implements PlayerModule {
 
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose (chemin possible) */
          for (PlayerMove playermove : sRet) {
-           // boolean wallIsOk = false;
+            boolean wallIsOk = false;
             quoridorBoard.setWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
 
-            //for (int i =0; i<quoridorBoard.BOARD_SIZE; i++) {
-
-              /* if (getShortestPath(getPlayerLocation(myId),new Coordinate(0,i)).size()  !=0  ){
+           for (int i =0; i<quoridorBoard.BOARD_SIZE; i++) {
+               if (getShortestPath(getPlayerLocation(myId),new Coordinate(0,i)).size()  !=0 || getShortestPath((getPlayerLocation(2)), new Coordinate(8, i)).size() != 0 ){
                     wallIsOk = true;
-                }*/
-               /* if (getShortestPath((getPlayerLocation(2)), new Coordinate(8, i)).size() != 0) {
-                    wallIsOk = true;
-                }*/
-            //}
-            //if(!wallIsOk){
-              //  sInterdit.add(playermove);
-            //}
+                }
+            }
+            if(!wallIsOk){
+                sInterdit.add(playermove);
+            }
 
             quoridorBoard.removeWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
 
