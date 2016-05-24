@@ -62,8 +62,6 @@ public class Brudmadhr implements PlayerModule {
             quoridorBoard.setWall(playerMove.getStart().getRow(), playerMove.getStart().getCol(),
                     playerMove.getEnd().getRow(), playerMove.getEnd().getCol());
         }
-        //quoridorBoard.getListeMurHorizontal(); Les listes sont correctes
-        //quoridorBoard.getListeMurVertical();
     }
 
 
@@ -137,7 +135,7 @@ public class Brudmadhr implements PlayerModule {
         while (!endOfPath) {
             Coordinate c = queue.poll();
             Coordinate cMin = null;
-            int dMin = 1000;
+            int dMin = 100000;
             for (Coordinate neighbor : getNeighbors(c)) {
                 if ((neighbor.getCol() == coordinate.getCol()) && (neighbor.getRow() == coordinate.getRow()))
                     endOfPath = true;
@@ -167,6 +165,18 @@ public class Brudmadhr implements PlayerModule {
     public Map<Integer, Coordinate> getPlayerLocations() {
         return playersCoord;
     }
+
+
+    @Override
+    public void playerInvalidated(int i) {
+        playersCoord.remove(i);
+    }
+
+    @Override
+    public int getID() {
+        return myId;
+    }
+
 
     @Override
     public Set<PlayerMove> allPossibleMoves() {
@@ -255,9 +265,6 @@ public class Brudmadhr implements PlayerModule {
                 // verification mur valide horizontal
                 if (quoridorBoard.poseMurHorizontal(i, j)) {
                     sRet.add(new PlayerMove(myId, false, new Coordinate(i, j - 1), new Coordinate(i, j + 1)));
-
-
-
                 }
                 //vertical
                 if (quoridorBoard.poseMurVertical(i, j)) {
@@ -276,48 +283,40 @@ public class Brudmadhr implements PlayerModule {
          *  2) si les murs ne se croisent pas
          *  3) la pose de ce mur n'empeche pas tous les joueurs à avoir au moins un chemin possible pour gagner
          */
-        /* Condition 1 : il reste un mur au moins au joueur à placer */
 
         Set<PlayerMove> sInterdit = new HashSet<>();
-        Set<PlayerMove> sRet = getAllWallsMovesInit();
+        Set<PlayerMove> sRet = new HashSet<PlayerMove>();
+
+        /* Condition 1 : il reste un mur au moins au joueur à placer */
 
         if (getWallsRemaining(myId) == 0) {
-            return new HashSet<PlayerMove>();
+            return sRet;
         }
-  /* Condition 2 : on construit la liste des murs possibles pour ensuite l'appliquer a� la condition 3 cad les murs ne se croisent pas  */
 
+        /* Condition 2 : on construit la liste des murs possibles  */
+        sRet = getAllWallsMovesInit();
 
-        /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose
-         */
+        /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose (chemin possible) */
+         for (PlayerMove playermove : sRet) {
+            boolean wallIsOk = false;
+            quoridorBoard.setWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
 
-        if (getPlayerLocations().keySet().size() == 2) {
-            for (PlayerMove playermove : sRet) {
-                /*
-                Board quoridorBoardBis = new Board();
-                quoridorBoardBis = quoridorBoard.clonage();
-                */
-                boolean wallIsOk = false;
-                //System.out.println("\n"+ quoridorBoardBis + quoridorBoard + "\n");
-                quoridorBoard.setWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
+            for (int i =0; i<quoridorBoard.BOARD_SIZE; i++) {
 
-                for (int i =0; i<quoridorBoard.BOARD_SIZE; i++) {
-
-                    if (getShortestPath(getPlayerLocation(myId),new Coordinate(0,i)).size()!=0  ){
-                        wallIsOk = true;
-                    }
-                    if (getShortestPath((getPlayerLocation(2)), new Coordinate(8, i)).size() != 0) {
-                        wallIsOk = true;
-                    }
+               /* if (getShortestPath(getPlayerLocation(myId),new Coordinate(0,i)).size()  !=0  ){
+                    wallIsOk = true;
                 }
-                if(!wallIsOk){
-                    sInterdit.add(playermove);
+                if (getShortestPath((getPlayerLocation(2)), new Coordinate(8, i)).size() != 0) {
+                    wallIsOk = true;
                 }
-
-                quoridorBoard.removeWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
-
             }
-        }
+            if(!wallIsOk){
+                sInterdit.add(playermove);
+            }*/
+            }
+            quoridorBoard.removeWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
 
+        }
 
         for(PlayerMove forbidden : sInterdit){
             sRet.remove(forbidden);
@@ -326,44 +325,8 @@ public class Brudmadhr implements PlayerModule {
         return sRet;
     }
 
-    /* playerId : id du joueur
-     * pos      : l'endroit (indice de la ligne ou colonne selon la valeur de b) où le joueur doit arriver pour gagner
-     * b        : si b=true il doit arriver sur une ligne sinon sur une colonne
-     */
-    private boolean wallIsBlockingPath(int playerId, int pos, boolean b) {
-        boolean bRet = true;
-        // gestion joueur 1/2
-        for (int c = 0; c < quoridorBoard.BOARD_SIZE; c++) {
-            System.out.println("\n" + getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size());
-            if ((getShortestPath(getPlayerLocation(playerId), new Coordinate(pos, c)).size()) == 0) {// Impossbilité de trouver un chemin jsuqu'à la case (0,c) ou (9,c)
-                bRet = true;
-            } else {
-                bRet = false;
-                return bRet;
-            } // On a trouvé un chemin possible
-        }
-        return bRet;
-    }
 
-    @Override
-    public PlayerMove move() {
-        // implémentation random pour l'instant
-        List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
-        Collections.shuffle(moves);
-        return moves.get(0);
-        //quoridorBoard.toString();
-        //return new PlayerMove(myId,true,getPlayerLocation(myId),new Coordinate(getPlayerLocation(myId).getRow()-1,getPlayerLocation(myId).getCol()));
-    }
 
-    @Override
-    public void playerInvalidated(int i) {
-        playersCoord.remove(i);
-    }
-
-    @Override
-    public int getID() {
-        return myId;
-    }
     
     /**
      * Fonction de calcul de l'heuristique dans un cadre 1v1
@@ -419,12 +382,12 @@ public class Brudmadhr implements PlayerModule {
     
     public void unmake(PlayerMove move){
     	if(move.isMove()){
-    		playersCoord.put(move.getPlayerId(),new Coordinate(move.getStartRow(), move.getStartCol()));
+    		playersCoord.remove(move.getPlayerId(),new Coordinate(move.getStartRow(), move.getStartCol()));
     	}else{
-    		//quoridorBoard.removeWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
+    		quoridorBoard.removeWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
     	}
     }
-    /*
+
     PlayerMove move_minimax() {
         List<Object> result = minimax(2, myId, Integer.MIN_VALUE, Integer.MAX_VALUE);
            // depth, max-turn, alpha, beta
@@ -435,39 +398,29 @@ public class Brudmadhr implements PlayerModule {
          with alpha-beta cut-off. Return int[3] of {score, row, col}  */
 
 
-    /*
+
     private List<Object> minimax(int depth, int playerId, int alpha, int beta) {
         // Generate possible next moves in a list of int[2] of {row, col}.
         Set<PlayerMove> nextMoves = allPossibleMoves();
    
         // myId is maximizing; while opponentId is minimizing
-<<<<<<< HEAD
+
         int score = -1;
         PlayerMove move_player = null;
   	    List<Object> answer = new ArrayList<Object>();
-=======
-        int score;
-        PlayerMove move_player;
-  	  List<Object> answer = new ArrayList<Object>();
->>>>>>> b1e9016b2f40bcb833dabf49c7aaac6a8fdd1f1e
-   
+
+
         if (nextMoves.isEmpty() || depth == 0) {
            // Gameover or depth reached, evaluate score
            score = evaluate();
-<<<<<<< HEAD
   		   answer.add(1, new PlayerMove(playerId, false, new Coordinate(-1,-1), new Coordinate(-1,-1))); // fin du jeu
   		   answer.add(0, score);
            return answer;
-=======
-  		 answer.add(1, new PlayerMove(playerId, false, -1, -1));
-  		 answer.add(0, score);
-           return answer;œ
->>>>>>> b1e9016b2f40bcb833dabf49c7aaac6a8fdd1f1e
         } else {
            for (PlayerMove move : nextMoves) {
               // try this move for the current "player"
         	   
-              //make(move); // fonction a implementer
+              make(move); // fonction a implementer
               
               if (playerId == myId) {
                  score =(int) minimax(depth - 1, opponentId, alpha, beta).get(0);
@@ -484,7 +437,7 @@ public class Brudmadhr implements PlayerModule {
               }
               
               // undo move
-              //unmake(move); // fonction a implementer
+              unmake(move); // fonction a implementer
               
               // cut-off
               if (alpha >= beta) break;
@@ -493,5 +446,16 @@ public class Brudmadhr implements PlayerModule {
   		 answer.add(0, score);
   		 return answer;
         }
-     }*/
+     }
+
+
+
+    @Override
+    public PlayerMove move() {
+        // implémentation random pour l'instant
+        List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
+        Collections.shuffle(moves);
+        return moves.get(0);
+        //return new PlayerMove(myId,true,getPlayerLocation(myId),new Coordinate(getPlayerLocation(myId).getRow()-1,getPlayerLocation(myId).getCol()));
+    }
 }

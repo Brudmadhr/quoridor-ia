@@ -94,11 +94,6 @@ public class Board {
         return true;
     }
 
-   /* public void removeWall(int idep, int jdep, int iarr, int jarr){
-    	intersections[(idep+iarr)/2][(jdep+jarr)/2] = false;
-    }*/
-
-
     // Vérifie qu'il n'y a pas d'intersection avec les bords
     public boolean wallCollisionEdges(int idep, int jdep, int iarr, int jarr){ // retourne true si collision avec un bord
     	return (idep<0 || iarr>BOARD_SIZE || jdep<0 || jarr>BOARD_SIZE);
@@ -121,28 +116,6 @@ public class Board {
             return true;
         }
     }
-/*
-    public void getListeMurHorizontal(){
-        for (int i = 0; i<BOARD_SIZE;i++){
-            for (int j=0;j<BOARD_SIZE;j++){
-                System.out.println(i +""+ j +"" + ListeMurHorizontal[i][j]);
-            }
-        }
-    }
-
-
-
-
-    public void getListeMurVertical(){
-        for (int i = 0; i<BOARD_SIZE;i++){
-            for (int j=0;j<BOARD_SIZE;j++){
-                System.out.println(i +""+ j +"" + ListeMurVertical[i][j]);
-            }
-        }
-    }
-    */
-
-
 
     public Brudmadhr getIa(){
         return this.ia;
@@ -176,23 +149,6 @@ public class Board {
     {
         this.ListeMurVertical[i][j]=toto[i][j];
     }
-/*
-    public Board clonage(){
-        Board clone= new Board();
-        clone.setIa(this.getIa());
-        for (int i=0; i<BOARD_SIZE;i++){
-            for (int j=0; j<BOARD_SIZE;j++){
-                clone.setBoard(this.getBoard(), i, j);
-            }
-        }
-        for (int i=0; i<BOARD_SIZE;i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                clone.setListeMurHorizontal(this.getListeMurHorizontal(), i, j);
-                clone.setListeMurVertical(this.getListeMurVertical(), i, j);
-            }
-        }
-        return clone;
-    }*/
 }
 
 
