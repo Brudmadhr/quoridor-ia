@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75eb7b4b-c011-4c74-bb54-a3b8f3433bf7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.txt" afterPath="$PROJECT_DIR$/config.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Players/Brudmadhr/Board.java" afterPath="$PROJECT_DIR$/src/Players/Brudmadhr/Board.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Players/Brudmadhr/Brudmadhr.java" afterPath="$PROJECT_DIR$/src/Players/Brudmadhr/Brudmadhr.java" />
     </list>
     <ignored path="quoridor-ia.iws" />
@@ -32,29 +31,30 @@
       <file leaf-file-name="Brudmadhr.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Players/Brudmadhr/Brudmadhr.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-63">
-              <caret line="485" column="14" selection-start-line="485" selection-start-column="14" selection-end-line="485" selection-end-column="14" />
+            <state relative-caret-position="210">
+              <caret line="47" column="34" selection-start-line="47" selection-start-column="34" selection-end-line="47" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#18218#18219#0" expanded="true" />
-                <element signature="e#18256#18257#0" expanded="true" />
-                <element signature="e#18305#18306#0" expanded="true" />
-                <element signature="e#18341#18342#0" expanded="true" />
-                <element signature="e#18374#18375#0" expanded="true" />
-                <element signature="e#18415#18416#0" expanded="true" />
-                <element signature="e#18454#18455#0" expanded="true" />
-                <element signature="e#18489#18490#0" expanded="true" />
+                <element signature="e#5851#5852#0" expanded="true" />
+                <element signature="e#5895#5896#0" expanded="true" />
+                <element signature="e#5959#5960#0" expanded="true" />
+                <element signature="e#6001#6002#0" expanded="true" />
+                <element signature="e#6075#6076#0" expanded="true" />
+                <element signature="e#6110#6111#0" expanded="true" />
+                <element signature="e#6169#6170#0" expanded="true" />
+                <element signature="e#6207#6208#0" expanded="true" />
+                <element signature="e#6247#6248#0" expanded="true" />
+                <element signature="e#6274#6275#0" expanded="true" />
+                <element signature="e#12906#12918#0" expanded="true" />
+                <element signature="e#21675#21676#0" expanded="true" />
+                <element signature="e#21713#21714#0" expanded="true" />
+                <element signature="e#21762#21763#0" expanded="true" />
+                <element signature="e#21798#21799#0" expanded="true" />
+                <element signature="e#21831#21832#0" expanded="true" />
+                <element signature="e#21872#21873#0" expanded="true" />
+                <element signature="e#21911#21912#0" expanded="true" />
+                <element signature="e#21946#21947#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="48" column="22" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="22" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -62,8 +62,18 @@
       <file leaf-file-name="Board.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Players/Brudmadhr/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="36" column="120" selection-start-line="36" selection-start-column="120" selection-end-line="36" selection-end-column="120" />
+            <state relative-caret-position="255">
+              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -109,9 +119,9 @@
         <option value="$PROJECT_DIR$/src/Players/BRUDMADHR/Board.java" />
         <option value="$PROJECT_DIR$/src/Players/BRUDMADHR/BRUDMADHR.java" />
         <option value="$PROJECT_DIR$/src/Players/Brudmadhr/BRUDMADHR.java" />
-        <option value="$PROJECT_DIR$/src/Players/Brudmadhr/Board.java" />
         <option value="$PROJECT_DIR$/config.part1.txt" />
         <option value="$PROJECT_DIR$/config.txt" />
+        <option value="$PROJECT_DIR$/src/Players/Brudmadhr/Board.java" />
         <option value="$PROJECT_DIR$/src/Players/Brudmadhr/Brudmadhr.java" />
       </list>
     </option>
@@ -180,6 +190,46 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Brudmadhr" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="quoridor-ia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="quoridor-ia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="quoridorclient.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="quoridor-ia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="quoridor-ia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="quoridorclient.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Players" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -775,6 +825,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="146">
           <caret line="381" column="29" selection-start-line="381" selection-start-column="29" selection-end-line="381" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -824,36 +875,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Players/Brudmadhr/Board.java">
+    <entry file="file://$PROJECT_DIR$/config.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="36" column="120" selection-start-line="36" selection-start-column="120" selection-end-line="36" selection-end-column="120" />
+        <state relative-caret-position="180">
+          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.txt">
+    <entry file="file://$PROJECT_DIR$/src/Players/Brudmadhr/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="48" column="22" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="22" />
+        <state relative-caret-position="255">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Players/Brudmadhr/Brudmadhr.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-63">
-          <caret line="485" column="14" selection-start-line="485" selection-start-column="14" selection-end-line="485" selection-end-column="14" />
+        <state relative-caret-position="210">
+          <caret line="47" column="34" selection-start-line="47" selection-start-column="34" selection-end-line="47" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#18218#18219#0" expanded="true" />
-            <element signature="e#18256#18257#0" expanded="true" />
-            <element signature="e#18305#18306#0" expanded="true" />
-            <element signature="e#18341#18342#0" expanded="true" />
-            <element signature="e#18374#18375#0" expanded="true" />
-            <element signature="e#18415#18416#0" expanded="true" />
-            <element signature="e#18454#18455#0" expanded="true" />
-            <element signature="e#18489#18490#0" expanded="true" />
+            <element signature="e#5851#5852#0" expanded="true" />
+            <element signature="e#5895#5896#0" expanded="true" />
+            <element signature="e#5959#5960#0" expanded="true" />
+            <element signature="e#6001#6002#0" expanded="true" />
+            <element signature="e#6075#6076#0" expanded="true" />
+            <element signature="e#6110#6111#0" expanded="true" />
+            <element signature="e#6169#6170#0" expanded="true" />
+            <element signature="e#6207#6208#0" expanded="true" />
+            <element signature="e#6247#6248#0" expanded="true" />
+            <element signature="e#6274#6275#0" expanded="true" />
+            <element signature="e#12906#12918#0" expanded="true" />
+            <element signature="e#21675#21676#0" expanded="true" />
+            <element signature="e#21713#21714#0" expanded="true" />
+            <element signature="e#21762#21763#0" expanded="true" />
+            <element signature="e#21798#21799#0" expanded="true" />
+            <element signature="e#21831#21832#0" expanded="true" />
+            <element signature="e#21872#21873#0" expanded="true" />
+            <element signature="e#21911#21912#0" expanded="true" />
+            <element signature="e#21946#21947#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -1,5 +1,4 @@
 package Players.Brudmadhr;
-import Interface.Coordinate;
 
 /**
  * Created by brudmadhr on 20/04/16.
@@ -9,14 +8,9 @@ public class Board {
     private byte[][] board;
     private boolean[][] ListeMurHorizontal;
     private boolean[][] ListeMurVertical;
-    private Brudmadhr ia;
     // Un tableau 9*9 , un byte pour modéliser les murs entre chaque case (1 bit pour chaque direction)
+
     public Board(){
-
-    }
-
-    public Board(Brudmadhr b){
-        ia = b;
         board = new byte[BOARD_SIZE][BOARD_SIZE];
         ListeMurHorizontal = new boolean[BOARD_SIZE+1][BOARD_SIZE+1];
         ListeMurVertical = new boolean[BOARD_SIZE+1][BOARD_SIZE+1];
@@ -36,8 +30,6 @@ public class Board {
     public boolean deplacementS(int i, int j){  return (i+1<BOARD_SIZE && !ListeMurHorizontal[i+1][j] && !ListeMurHorizontal[i+1][j+1]);}
     public boolean deplacementO(int i, int j){  return (j-1>=0         && !ListeMurVertical[i][j] && ! ListeMurVertical [i+1][j]);}
 
-
-    
     /**
      *  idep, jdep : coords depart ; iarr, jarr : coords arrivee
      *  
@@ -118,20 +110,7 @@ public class Board {
         }
     }
 
-    public Brudmadhr getIa(){
-        return this.ia;
-    }
-
-    public void setIa(Brudmadhr bonjour){
-        this.ia=bonjour;
-    }
-
     public byte[][] getBoard(){return board;}
-
-    public void setBoard(byte[][] toto,int i,int j) {
-        board[i][j]= (byte) (board[i][j] | toto[i][j]);
-
-    }
 
     public boolean[][] getListeMurHorizontal(){
         return this.ListeMurHorizontal;
@@ -151,16 +130,3 @@ public class Board {
         this.ListeMurVertical[i][j]=toto[i][j];
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

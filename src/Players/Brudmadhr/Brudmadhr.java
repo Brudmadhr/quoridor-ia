@@ -45,7 +45,7 @@ public class Brudmadhr implements PlayerModule {
 
         }
 
-        quoridorBoard = new Board(this);
+        quoridorBoard = new Board();
     }
 
 
@@ -211,11 +211,11 @@ public class Brudmadhr implements PlayerModule {
                     }
                     //DIAGONALE E
                     else {
-                        if (quoridorBoard.deplacementE(myLig - 1, myCol)) {
+                        if (myLig > 0 && quoridorBoard.deplacementE(myLig - 1, myCol)) {
                             finalPosition = new Coordinate(i - 1, j);
                             sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
-                        if (quoridorBoard.deplacementE(myLig + 1, myCol)) {
+                        if (myLig < 9 && quoridorBoard.deplacementE(myLig + 1, myCol)) {
                             finalPosition = new Coordinate(i + 1, j);
                             sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
@@ -223,17 +223,17 @@ public class Brudmadhr implements PlayerModule {
                 }
                 if (myLig == i && myCol-1==j) {
                     //OUEST
-                    if (quoridorBoard.deplacementO(i, j)) {
+                    if (myCol > 0 && quoridorBoard.deplacementO(i, j)) {
                         finalPosition = new Coordinate(i, j - 1);
                         sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                     }
                     //DIAGONALE O
                     else {
-                        if (quoridorBoard.deplacementO(myLig - 1, myCol)) {
+                        if (myLig > 0 && quoridorBoard.deplacementO(myLig - 1, myCol)) {
                             finalPosition = new Coordinate(i - 1, j);
                             sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
-                        if (quoridorBoard.deplacementO(myLig + 1, myCol)) {
+                        if (myLig < 9 && quoridorBoard.deplacementO(myLig + 1, myCol)) {
                             finalPosition = new Coordinate(i + 1, j);
                             sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
@@ -247,11 +247,11 @@ public class Brudmadhr implements PlayerModule {
                     }
                     //DIAGONALE N
                     else{
-                        if (quoridorBoard.deplacementN(myLig, myCol - 1)) {
+                        if (myCol > 0 && quoridorBoard.deplacementN(myLig, myCol - 1)) {
                             finalPosition = new Coordinate(i, j - 1);
                             sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
-                        if (quoridorBoard.deplacementN(myLig, myCol + 1)) {
+                        if (myCol < 9 && quoridorBoard.deplacementN(myLig, myCol + 1)) {
                             finalPosition = new Coordinate(i, j + 1);
                             sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
@@ -265,11 +265,11 @@ public class Brudmadhr implements PlayerModule {
                     }
                         //DIAGONALE S
                     else {
-                        if (quoridorBoard.deplacementS(myLig, myCol - 1)) {
+                        if (myLig < 9 && myCol > 0 && quoridorBoard.deplacementS(myLig, myCol - 1)) {
                             finalPosition = new Coordinate(i + 1, j - 1);
                             sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
-                        if (quoridorBoard.deplacementS(myLig, myCol + 1)) {
+                        if (myLig < 9 && myCol < 9 && quoridorBoard.deplacementS(myLig, myCol + 1)) {
                             finalPosition = new Coordinate(i + 1, j + 1);
                             sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                         }
@@ -323,7 +323,9 @@ public class Brudmadhr implements PlayerModule {
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose (chemin possible) */
          for (PlayerMove playermove : sRet) {
             boolean wallIsOk = false;
-            quoridorBoard.setWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
+             // calcul chemin adv pour savoir si la pause de mur sera pertinante (augmentation de son chemin)
+
+             quoridorBoard.setWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
 
            for (int i =0; i<quoridorBoard.BOARD_SIZE; i++) {
                if (getShortestPath(getPlayerLocation(myId),new Coordinate(0,i)).size()  !=0 && getShortestPath((getPlayerLocation(2)), new Coordinate(8, i)).size() != 0 ){
@@ -347,21 +349,6 @@ public class Brudmadhr implements PlayerModule {
 
 
 
-    
-    /**
-     * Fonction de calcul de l'heuristique dans un cadre 1v1
-     * 
-     * On suppose que le joueur 1 (id=1) doit aller en haut du plateau (row==0)
-     * On suppose que le joueur 2 (id=2) doit aller en haut du plateau (row==8)
-     * /
-
-
-    PlayerMove move_minimax() {
-        List<Object> result = minimax(1, myId, Integer.MIN_VALUE, Integer.MAX_VALUE);
-           // depth, max-turn, alpha, beta
-        return (PlayerMove)result.get(1);  // returns best move
-     }
-   
      /** Minimax (recursive) at level of depth for maximizing or minimizing player
          with alpha-beta cut-off. Return int[3] of {score, row, col}  */
 
@@ -433,7 +420,7 @@ public class Brudmadhr implements PlayerModule {
     }
 
     PlayerMove move_minimax() {
-        PlayerMove result = minimax(3, myId, Integer.MIN_VALUE, Integer.MAX_VALUE).getMove();
+        PlayerMove result = minimax(2, myId, Integer.MIN_VALUE, Integer.MAX_VALUE).getMove();
         // depth, max-turn, alpha, beta
         return result;  // returns best move
     }
@@ -441,11 +428,122 @@ public class Brudmadhr implements PlayerModule {
     /** Minimax (recursive) at level of depth for maximizing or minimizing player
      with alpha-beta cut-off. Return int[3] of {score, row, col}  */
 
-    public class coup{
+
+
+    private Coup minimax( int depth, int playerId, int alpha, int beta) {
+        // Generate possible next moves in a list of int[2] of {row, col}.
+        Set<PlayerMove> nextMoves = getAllPieceMoves();
+
+        //System.out.println("Nb de coups possibles : "+nextMoves.size());
+
+        // myId is maximizing; while opponentId is minimizing
+
+        int score = -1;
+        PlayerMove move_player = null;
+        Coup answer = new Coup(score, move_player);
+
+
+        if (nextMoves.isEmpty() || depth == 0) {
+            // Gameover or depth reached, evaluate score
+            score = evaluate();
+            //System.out.println("Score : "+score);
+                     /*answer.add(1, new PlayerMove(playerId, false, new Coordinate(-1,-1), new Coordinate(-1,-1))); // fin du jeu
+                     answer.add(0, score);*/
+            answer.setScore(score);
+            answer.setMove(new PlayerMove(playerId, false, new Coordinate(-1,-1), new Coordinate(-1,-1)));
+            return answer;
+        } else {
+            for (PlayerMove move : nextMoves) {
+                // try this move for the current "player"
+
+                make(move); // fonction a implementer
+                // MAX
+                if (playerId == myId) {
+                    score = minimax(depth - 1, opponentId, alpha, beta).getScore();
+                    if (score > alpha) {
+                        alpha = score;
+                        move_player = move;
+                    }
+                }
+                // MIN
+                else {
+                    score = minimax(depth - 1, myId, alpha, beta).getScore();
+                    if(score < beta) {
+                        beta = score;
+                        move_player = move;
+                    }
+                }
+
+                // undo move
+                unmake(move); // fonction a implementer
+
+                // cut-off
+                if (alpha >= beta) break;
+            }
+            answer.setMove(move_player);
+            answer.setScore(score);
+            //System.out.println("Score : "+score);
+            return answer;
+        }
+    }
+
+    public PlayerMove random(){
+        // RANDOM POUR LES HOMMES
+        List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
+        Collections.shuffle(moves);
+        return moves.get(0);
+    }
+
+    public PlayerMove rabbit(){
+        //RABBIT POUR ALLER VITE
+        Coordinate cdest = null;
+        int best_path=1000;
+        Set<PlayerMove> pieceMoves = getAllPieceMoves();
+        for(PlayerMove m : pieceMoves){
+            if(finished(m.getEnd(),1)){
+                return m;
+            }
+        }
+        for(int i=0;i<quoridorBoard.BOARD_SIZE;i++){
+            List<Coordinate> path = getShortestPath(getPlayerLocation(myId),new Coordinate(0,i));
+            if(path.size() < best_path) {
+                best_path = path.size();
+                cdest = path.get(1);
+            }
+        }
+        return new PlayerMove(myId,true,getPlayerLocation(myId),cdest);
+    }
+
+    @Override
+    public PlayerMove move() {
+        //return random();
+        //return rabbit();
+        Set<PlayerMove> pieces = getAllPieceMoves();
+        for (PlayerMove m : pieces){
+            if(finished(m.getEnd(),1)){
+                return m;
+            }
+        }
+        return move_minimax();
+    }
+
+
+    public boolean finished(Coordinate c, Integer pl) {
+        if (pl == 1 && c.getRow() == 0) {
+            return true;
+        } else if (pl == 2 && c.getRow() == 8) {
+            return true;
+        } else if (pl == 3 && c.getCol() == 0) {
+            return true;
+        } else if (pl == 4 && c.getCol() == 8) { return true; }
+        return false;
+    }
+
+    public class Coup{
         int score;
         PlayerMove move;
 
-        coup(int _score, PlayerMove _move){
+        Coup(int _score, PlayerMove _move){
             score = _score;
             move = _move;
         }
@@ -467,68 +565,4 @@ public class Brudmadhr implements PlayerModule {
         }
     }
 
-    private coup minimax( int depth, int playerId, int alpha, int beta) {
-        // Generate possible next moves in a list of int[2] of {row, col}.
-        Set<PlayerMove> nextMoves = allPossibleMoves();
-
-        //System.out.println("Nb de coups possibles : "+nextMoves.size());
-
-        // myId is maximizing; while opponentId is minimizing
-
-        int score = -1;
-        PlayerMove move_player = null;
-        coup answer = new coup(score, move_player);
-
-
-        if (nextMoves.isEmpty() || depth == 0) {
-            // Gameover or depth reached, evaluate score
-            score = evaluate();
-            //System.out.println("Score : "+score);
-                     /*answer.add(1, new PlayerMove(playerId, false, new Coordinate(-1,-1), new Coordinate(-1,-1))); // fin du jeu
-                     answer.add(0, score);*/
-            answer.setScore(score);
-            answer.setMove(new PlayerMove(playerId, false, new Coordinate(-1,-1), new Coordinate(-1,-1)));
-            return answer;
-        } else {
-            for (PlayerMove move : nextMoves) {
-                // try this move for the current "player"
-
-                make(move); // fonction a implementer
-
-                if (playerId == myId) {
-                    score = minimax(depth - 1, opponentId, alpha, beta).getScore();
-                    if (score > alpha) {
-                        alpha = score;
-                        move_player = move;
-                    }
-                } else {
-                    score = minimax(depth - 1, myId, alpha, beta).getScore();
-                    beta = score;
-                    move_player = move;
-                }
-
-                // undo move
-                unmake(move); // fonction a implementer
-
-                // cut-off
-                if (alpha >= beta) break;
-            }
-            answer.setMove(move_player);
-            answer.setScore(score);
-            //System.out.println("Score : "+score);
-            return answer;
-        }
-    }
-
-
-
-    @Override
-    public PlayerMove move() {
-        // implémentation random pour l'instant
-        //List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
-        //Collections.shuffle(moves);
-        //return moves.get(0);
-        return move_minimax();
-        //return new PlayerMove(myId,true,getPlayerLocation(myId),new Coordinate(getPlayerLocation(myId).getRow()-1,getPlayerLocation(myId).getCol()));
-    }
 }
