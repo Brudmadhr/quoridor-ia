@@ -10,7 +10,7 @@ API_KEY rennes1
 # List of player modules separated by commas (no spaces between!).
 # The number of modules listed here specifies the number of players in the game
 # To play via the GUI, use Human.
-PLAYER_MODULES Brudmadhr,Human
+PLAYER_MODULES Brudmadhr,RandomPlayer
 
 # Does the graphical UI display?
 UI True
@@ -46,7 +46,7 @@ NUM_WALLS {1:10, 2:10, 4:5}
 # This is the time limit, in seconds, that your player has to successful return
 # a move when it is your turn.  If this limit is exceeded, your player is
 # invalidated.  If you are debugging, increase this number greatly.
-PLAYER_MOVE_LIMIT 10.0
+PLAYER_MOVE_LIMIT 60.0
 
 # Web service domain (do not change)
 WEB_SERVICE_DOMAIN games.cs.rit.edu/quoridorapi
