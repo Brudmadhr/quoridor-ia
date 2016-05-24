@@ -31,10 +31,10 @@ public class Board {
     }
 
     // Représentation mur : bit 1 = N bit 2 = E bit 3 = S bit 4 = O
-    public boolean deplacementN(int i, int j){  return (i-1>=0         && (board[i][j] != 0b00001000) );}
-    public boolean deplacementE(int i, int j){  return (j+1<BOARD_SIZE && (board[i][j] != 0b00000100) );}
-    public boolean deplacementS(int i, int j){  return (i+1<BOARD_SIZE && (board[i][j] != 0b00000010) );}
-    public boolean deplacementO(int i, int j){  return (j-1>=0         && (board[i][j] != 0b00000001) );}
+    public boolean deplacementN(int i, int j){  return (i-1>=0         && !ListeMurHorizontal[i][j] && !ListeMurHorizontal[i][j+1]);}
+    public boolean deplacementE(int i, int j){  return (j+1<BOARD_SIZE && !ListeMurVertical[i][j+1] && !ListeMurVertical[i+1][j+1]);}
+    public boolean deplacementS(int i, int j){  return (i+1<BOARD_SIZE && !ListeMurHorizontal[i+1][j] && !ListeMurHorizontal[i+1][j+1]);}
+    public boolean deplacementO(int i, int j){  return (j-1>=0         && !ListeMurVertical[i][j] && ! ListeMurVertical [i+1][j]);}
 
 
     
