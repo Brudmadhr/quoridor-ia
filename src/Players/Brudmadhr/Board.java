@@ -23,6 +23,7 @@ public class Board {
 
         for(int i=0;i<BOARD_SIZE;i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
+                board[i][j] = 0b00000000;
                 ListeMurHorizontal[i][j] = false;
                 ListeMurVertical[i][j] = false;
             }
@@ -30,10 +31,10 @@ public class Board {
     }
 
     // Représentation mur : bit 1 = N bit 2 = E bit 3 = S bit 4 = O
-    public boolean deplacementN(int i, int j){  return (i-1>=0         && ( (board[i][j] & 8) == 0) );}
-    public boolean deplacementE(int i, int j){  return (j+1<BOARD_SIZE && ( (board[i][j] & 4) == 0) );}
-    public boolean deplacementS(int i, int j){  return (i+1<BOARD_SIZE && ( (board[i][j] & 2) == 0) );}
-    public boolean deplacementO(int i, int j){  return (j-1>=0         && ( (board[i][j] & 1) == 0) );}
+    public boolean deplacementN(int i, int j){  return (i-1>=0         && (board[i][j] != 0b00001000) );}
+    public boolean deplacementE(int i, int j){  return (j+1<BOARD_SIZE && (board[i][j] != 0b00000100) );}
+    public boolean deplacementS(int i, int j){  return (i+1<BOARD_SIZE && (board[i][j] != 0b00000010) );}
+    public boolean deplacementO(int i, int j){  return (j-1>=0         && (board[i][j] != 0b00000001) );}
 
 
     
@@ -47,17 +48,17 @@ public class Board {
         int j =(jdep+jarr)/2;
         if(!wallCollisionEdges(idep, jdep, iarr, jarr) ){ // si pas de collision avec un bord
     		if(idep == iarr && poseMurHorizontal(i, j) ) { // ajout d'un mur horizontal
-	    		board[idep][jdep]    = (byte) (board[idep][jdep]       | 0b1000);
-	    		board[idep][jdep+1]  = (byte) (board[idep][jdep+1]     | 0b1000);
-	    		board[idep-1][jdep]  = (byte) (board[idep-1][jdep]     | 0b0010);
-	    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b0010);
+	    		board[idep][jdep]    = (byte) (board[idep][jdep]       | 0b00001000);
+	    		board[idep][jdep+1]  = (byte) (board[idep][jdep+1]     | 0b00001000);
+	    		board[idep-1][jdep]  = (byte) (board[idep-1][jdep]     | 0b00000010);
+	    		board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b00000010);
 				ListeMurHorizontal[i][j]=true;// ajout de l'intersection (milieu du mur) dans liste des murs horizontaux
 	    	}else{
                 if(jdep == jarr && poseMurVertical(i,j) ){ // meme colonne, ajout d'un mur vertical
-                    board[idep][jdep]    = (byte) (board[idep][jdep]       | 0b0001);
-                    board[idep+1][jdep]  = (byte) (board[idep+1][jdep]     | 0b0001);
-                    board[idep][jdep-1]  = (byte) (board[idep][jdep-1]     | 0b0100);
-                    board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b0100);
+                    board[idep][jdep]    = (byte) (board[idep][jdep]       | 0b00000001);
+                    board[idep+1][jdep]  = (byte) (board[idep+1][jdep]     | 0b00000001);
+                    board[idep][jdep-1]  = (byte) (board[idep][jdep-1]     | 0b00000100);
+                    board[iarr-1][jarr-1]= (byte) (board[iarr-1][jarr-1]   | 0b00000100);
                     ListeMurVertical[i][j]=true;// ajout de l'intersection (milieu du mur) dans liste des murs verticaux
                 }else{
                    // System.err.println("Impossible de placer un mur a cet endroit! lors du set" + "\n");

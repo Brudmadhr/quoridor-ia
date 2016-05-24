@@ -182,7 +182,7 @@ public class Brudmadhr implements PlayerModule {
     public Set<PlayerMove> allPossibleMoves() {
         Set<PlayerMove> sRet = new HashSet<>();
         sRet.addAll(getAllPieceMoves());
-        sRet.addAll(getAllWallsMoves());
+       // sRet.addAll(getAllWallsMoves());
         return sRet;
     }
 
@@ -193,66 +193,73 @@ public class Brudmadhr implements PlayerModule {
         for (Coordinate neighbor : getNeighbors(getPlayerLocation(myId))) { //cases voisines du joueur
             Coordinate finalPosition = neighbor; // destination possible
             // test si adversaire sur case voisine
-            for (Integer playerId : playersCoord.keySet()) {
-                Coordinate opponentPosition = getPlayerLocation(playerId);
-                int i = opponentPosition.getRow();
-                int j = opponentPosition.getCol();
-                if (playerId != myId && (i == neighbor.getRow() && j == neighbor.getCol())) {
-                    /* on a un adversaire à côté de nous on peut éventuellement le sauter :
-                     *  - s'il n'est pas sur un bord
-                     *  - s'il n'y a pas de mur derrière lui
-                     *  les méthodes de la classes board vérifient cela !
-                     */
-                    if (myLig == i) {
-                        //EST
-                        if (quoridorBoard.deplacementE(i, j)) finalPosition = new Coordinate(i, j + 1);
-                            //DIAGONALE E
-                        else if (quoridorBoard.deplacementE(myLig - 1, myCol)) {
-                            finalPosition = new Coordinate(i - 1, j + 1);
-                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        } else if (quoridorBoard.deplacementE(myLig, myCol + 1)) {
-                            finalPosition = new Coordinate(i + 1, j + 1);
-                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        }
-                        //OUEST
-                        if (quoridorBoard.deplacementO(i, j)) finalPosition = new Coordinate(i, j - 1);
-                            //DIAGONALE O
-                        else if (quoridorBoard.deplacementO(myLig - 1, myCol)) {
-                            finalPosition = new Coordinate(i - 1, j - 1);
-                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        } else if (quoridorBoard.deplacementO(myLig + 1, myCol)) {
-                            finalPosition = new Coordinate(i + 1, j - 1);
-                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        }
+            Coordinate opponentPosition = getPlayerLocation(2);
+            int i = opponentPosition.getRow();
+            int j = opponentPosition.getCol();
+            if ((i == neighbor.getRow() && j == neighbor.getCol())) {
+                /* on a un adversaire à côté de nous on peut éventuellement le sauter :
+                 *  - s'il n'est pas sur un bord
+                 *  - s'il n'y a pas de mur derrière lui
+                 *  les méthodes de la classes board vérifient cela !
+                 */
+                if (myLig == i) {
+                    //EST
+                    if (quoridorBoard.deplacementE(i, j)) {
+                        finalPosition = new Coordinate(i, j + 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    }
+                        //DIAGONALE E
+                    else if (quoridorBoard.deplacementE(myLig - 1, myCol)) {
+                        finalPosition = new Coordinate(i - 1, j + 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    } else if (quoridorBoard.deplacementE(myLig, myCol + 1)) {
+                        finalPosition = new Coordinate(i + 1, j + 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    }
+                    //OUEST
+                    if (quoridorBoard.deplacementO(i, j)) {
+                        finalPosition = new Coordinate(i, j - 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    }
+                        //DIAGONALE O
+                    else if (quoridorBoard.deplacementO(myLig - 1, myCol)) {
+                        finalPosition = new Coordinate(i - 1, j - 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    } else if (quoridorBoard.deplacementO(myLig + 1, myCol)) {
+                        finalPosition = new Coordinate(i + 1, j - 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    }
 
-                    } else if (myCol == j) {
-                        //NORD
-                        if (quoridorBoard.deplacementN(i, j)) {
-                            finalPosition = new Coordinate(i - 1, j);
-                        }
-                        //DIAGONALE N
-                        else if (quoridorBoard.deplacementN(myLig, myCol - 1)) {
-                            finalPosition = new Coordinate(i, j - 1);
-                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        } else if (quoridorBoard.deplacementN(myLig, myCol + 1)) {
-                            finalPosition = new Coordinate(i, j + 1);
-                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        }
-                        //SUD
-                        if (quoridorBoard.deplacementS(i, j)) finalPosition = new Coordinate(i + 1, j);
-                            //DIAGONALE S
-                        else if (quoridorBoard.deplacementS(myLig, myCol - 1)) {
-                            finalPosition = new Coordinate(i + 1, j - 1);
-                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        } else if (quoridorBoard.deplacementS(myLig, myCol + 1)) {
-                            finalPosition = new Coordinate(i + 1, j + 1);
-                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                        }
+                } else if (myCol == j) {
+                    //NORD
+                    if (quoridorBoard.deplacementN(i, j)) {
+                        finalPosition = new Coordinate(i - 1, j);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    }
+                    //DIAGONALE N
+                    else if (quoridorBoard.deplacementN(myLig, myCol - 1)) {
+                        finalPosition = new Coordinate(i, j - 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    } else if (quoridorBoard.deplacementN(myLig, myCol + 1)) {
+                        finalPosition = new Coordinate(i, j + 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    }
+                    //SUD
+                    if (quoridorBoard.deplacementS(i, j)) {
+                        finalPosition = new Coordinate(i + 1, j);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    }
+                        //DIAGONALE S
+                    else if (quoridorBoard.deplacementS(myLig, myCol - 1)) {
+                        finalPosition = new Coordinate(i + 1, j - 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    } else if (quoridorBoard.deplacementS(myLig, myCol + 1)) {
+                        finalPosition = new Coordinate(i + 1, j + 1);
+                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                     }
                 }
             }
-            if (!getPlayerLocation(myId).equals(finalPosition))
-                sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition)); // on ajoute le coup possible à la liste
+            else sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
         }
         return sRet;
     }
@@ -298,22 +305,22 @@ public class Brudmadhr implements PlayerModule {
 
         /* Condition 3 : pour chaque joueur on vérifie que la méthode getShortestPath retourne quelque chose (chemin possible) */
          for (PlayerMove playermove : sRet) {
-            boolean wallIsOk = false;
+           // boolean wallIsOk = false;
             quoridorBoard.setWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
 
-            for (int i =0; i<quoridorBoard.BOARD_SIZE; i++) {
+            //for (int i =0; i<quoridorBoard.BOARD_SIZE; i++) {
 
-               /* if (getShortestPath(getPlayerLocation(myId),new Coordinate(0,i)).size()  !=0  ){
+              /* if (getShortestPath(getPlayerLocation(myId),new Coordinate(0,i)).size()  !=0  ){
                     wallIsOk = true;
-                }
-                if (getShortestPath((getPlayerLocation(2)), new Coordinate(8, i)).size() != 0) {
+                }*/
+               /* if (getShortestPath((getPlayerLocation(2)), new Coordinate(8, i)).size() != 0) {
                     wallIsOk = true;
-                }
-            }
-            if(!wallIsOk){
-                sInterdit.add(playermove);
-            }*/
-            }
+                }*/
+            //}
+            //if(!wallIsOk){
+              //  sInterdit.add(playermove);
+            //}
+
             quoridorBoard.removeWall(playermove.getStart().getRow(), playermove.getStart().getCol(), playermove.getEnd().getRow(), playermove.getEnd().getCol());
 
         }
@@ -382,14 +389,14 @@ public class Brudmadhr implements PlayerModule {
     
     public void unmake(PlayerMove move){
     	if(move.isMove()){
-    		playersCoord.remove(move.getPlayerId(),new Coordinate(move.getStartRow(), move.getStartCol()));
+    		playersCoord.put(move.getPlayerId(),new Coordinate(move.getStartRow(), move.getStartCol()));
     	}else{
     		quoridorBoard.removeWall(move.getStartRow(), move.getStartCol(), move.getEndRow(), move.getEndCol());
     	}
     }
 
     PlayerMove move_minimax() {
-        List<Object> result = minimax(2, myId, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        List<Object> result = minimax(10, myId, Integer.MIN_VALUE, Integer.MAX_VALUE);
            // depth, max-turn, alpha, beta
         return (PlayerMove)result.get(1);  // returns best move
      }
@@ -456,6 +463,7 @@ public class Brudmadhr implements PlayerModule {
         List<PlayerMove> moves = new LinkedList<>(allPossibleMoves());
         Collections.shuffle(moves);
         return moves.get(0);
+        //return move_minimax();
         //return new PlayerMove(myId,true,getPlayerLocation(myId),new Coordinate(getPlayerLocation(myId).getRow()-1,getPlayerLocation(myId).getCol()));
     }
 }
