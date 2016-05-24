@@ -202,60 +202,76 @@ public class Brudmadhr implements PlayerModule {
                  *  - s'il n'y a pas de mur derrière lui
                  *  les méthodes de la classes board vérifient cela !
                  */
-                if (myLig == i) {
+                if (myLig == i && myCol+1==j) {
                     //EST
                     if (quoridorBoard.deplacementE(i, j)) {
                         finalPosition = new Coordinate(i, j + 1);
                         sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                     }
-                        //DIAGONALE E
-                    else if (quoridorBoard.deplacementE(myLig - 1, myCol)) {
-                        finalPosition = new Coordinate(i - 1, j + 1);
-                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                    } else if (quoridorBoard.deplacementE(myLig, myCol + 1)) {
-                        finalPosition = new Coordinate(i + 1, j + 1);
-                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    //DIAGONALE E
+                    else {
+                        if (quoridorBoard.deplacementE(myLig - 1, myCol)) {
+                            finalPosition = new Coordinate(i - 1, j);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+                        if (quoridorBoard.deplacementE(myLig + 1, myCol)) {
+                            finalPosition = new Coordinate(i + 1, j);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
                     }
+                }
+                if (myLig == i && myCol-1==j) {
                     //OUEST
                     if (quoridorBoard.deplacementO(i, j)) {
                         finalPosition = new Coordinate(i, j - 1);
                         sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                     }
-                        //DIAGONALE O
-                    else if (quoridorBoard.deplacementO(myLig - 1, myCol)) {
-                        finalPosition = new Coordinate(i - 1, j - 1);
-                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                    } else if (quoridorBoard.deplacementO(myLig + 1, myCol)) {
-                        finalPosition = new Coordinate(i + 1, j - 1);
-                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    //DIAGONALE O
+                    else {
+                        if (quoridorBoard.deplacementO(myLig - 1, myCol)) {
+                            finalPosition = new Coordinate(i - 1, j);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+                        if (quoridorBoard.deplacementO(myLig + 1, myCol)) {
+                            finalPosition = new Coordinate(i + 1, j);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
                     }
-
-                } else if (myCol == j) {
+                }
+                if (myCol == j && myLig -1 ==i ) {
                     //NORD
                     if (quoridorBoard.deplacementN(i, j)) {
                         finalPosition = new Coordinate(i - 1, j);
                         sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                     }
                     //DIAGONALE N
-                    else if (quoridorBoard.deplacementN(myLig, myCol - 1)) {
-                        finalPosition = new Coordinate(i, j - 1);
-                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                    } else if (quoridorBoard.deplacementN(myLig, myCol + 1)) {
-                        finalPosition = new Coordinate(i, j + 1);
-                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    else{
+                        if (quoridorBoard.deplacementN(myLig, myCol - 1)) {
+                            finalPosition = new Coordinate(i, j - 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+                        if (quoridorBoard.deplacementN(myLig, myCol + 1)) {
+                            finalPosition = new Coordinate(i, j + 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
                     }
+                }
+                if (myCol==j && myLig+1 == i){
                     //SUD
                     if (quoridorBoard.deplacementS(i, j)) {
                         finalPosition = new Coordinate(i + 1, j);
                         sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
                     }
                         //DIAGONALE S
-                    else if (quoridorBoard.deplacementS(myLig, myCol - 1)) {
-                        finalPosition = new Coordinate(i + 1, j - 1);
-                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
-                    } else if (quoridorBoard.deplacementS(myLig, myCol + 1)) {
-                        finalPosition = new Coordinate(i + 1, j + 1);
-                        sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                    else {
+                        if (quoridorBoard.deplacementS(myLig, myCol - 1)) {
+                            finalPosition = new Coordinate(i + 1, j - 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
+                        if (quoridorBoard.deplacementS(myLig, myCol + 1)) {
+                            finalPosition = new Coordinate(i + 1, j + 1);
+                            sRet.add(new PlayerMove(myId, true, getPlayerLocation(myId), finalPosition));
+                        }
                     }
                 }
             }
